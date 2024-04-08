@@ -1,0 +1,180 @@
+\makeatletter
+\newcommand*{\germanTitle}[1]{\gdef\@germanTitle{#1}}
+\newcommand*{\englishTitle}[1]{\gdef\@englishTitle{#1}}
+\newcommand*{\gradeType}[1]{\gdef\@gradeType{#1}}
+\newcommand*{\firstExaminer}[1]{\gdef\@firstExaminer{#1}}
+\newcommand*{\secondExaminer}[1]{\gdef\@secondExaminer{#1}}
+\newcommand*{\matrikelnr}[1]{\gdef\@matrikelnr{#1}}
+\newcommand*{\authorBirthplace}[1]{\gdef\@authorBirthplace{#1}}
+\newcommand*{\submitDate}[1]{\gdef\@submitDate{#1}}
+\newcommand*{\discipline}[1]{\gdef\@discipline{#1}}
+\newcommand*{\courseOfStudies}[1]{\gdef\@courseOfStudies{#1}}
+\newcommand*{\authorLastname}[1]{\gdef\@authorLastname{#1}}
+\newcommand*{\authorFirstname}[1]{\gdef\@authorFirstname{#1}}
+
+\renewcommand*{\maketitle}{
+	\begin{titlepage}
+		\newgeometry{left=3.8cm,right=2.5cm,top=4.6cm,bottom=2.5cm}
+			\begingroup
+				\fontsize{32pt}{32pt}\selectfont
+				{\bfseries Bachelor Thesis}
+			\endgroup
+
+			\vskip 1.44cm
+
+			\begingroup
+			\fontsize{8pt}{6pt}\selectfont
+			Title of the Thesis // Titel der Arbeit
+			\endgroup
+
+			\vskip -0.02cm
+
+			\begingroup
+			\fontsize{14pt}{14pt}\selectfont
+			{\bfseries \@englishTitle\par}
+			\vspace{0.3cm} % Add vertical space between German and English title
+			{\@germanTitle\par}
+			\endgroup
+			\vskip -0.1cm
+
+			\noindent\rule{15cm}{0.4pt}
+			
+			\vskip 0.05cm
+
+			\begingroup
+			\fontsize{8pt}{6pt}\selectfont
+			Academic Degree // Akademischer Grad
+			\endgroup
+
+			\vskip -0.15cm
+
+			\begingroup
+			\fontsize{12pt}{14pt}\selectfont
+				{\@gradeType}
+			\endgroup
+			\vskip -0.15cm
+
+			\noindent\rule{15cm}{0.4pt}
+			
+			\vskip 0.05cm
+
+			\begingroup
+			\fontsize{8pt}{6pt}\selectfont
+			Author's Name, Place of Birth // Name der Autorin/des Autors, Geburtsort
+			\endgroup
+
+			\vskip -0.15cm
+
+			\begingroup
+			\fontsize{12pt}{14pt}\selectfont
+				{\@authorFirstname} {\@authorLastname}, {\@authorBirthplace}
+			\endgroup
+			\vskip -0.15cm
+
+			\noindent\rule{15cm}{0.4pt}
+			
+			\vskip 0.05cm
+
+			\begingroup
+			\fontsize{8pt}{6pt}\selectfont
+			Field of Study // Studiengang
+			\endgroup
+
+			\vskip -0.15cm
+
+			\begingroup
+			\fontsize{12pt}{14pt}\selectfont
+				{\@courseOfStudies}
+			\endgroup
+			\vskip -0.15cm
+
+			\noindent\rule{15cm}{0.4pt}
+			
+			\vskip 0.05cm
+
+			\begingroup
+			\fontsize{8pt}{6pt}\selectfont
+			Department // Fachbereich
+			\endgroup
+
+			\vskip -0.15cm
+
+			\begingroup
+			\fontsize{12pt}{14pt}\selectfont
+				{\@discipline}
+			\endgroup
+			\vskip -0.15cm
+
+			\noindent\rule{15cm}{0.4pt}
+			
+			\vskip 0.05cm
+
+			\begingroup
+			\fontsize{8pt}{6pt}\selectfont
+			First Examiner // Erstprüferin/Erstprüfer
+			\endgroup
+
+			\vskip -0.15cm
+
+			\begingroup
+			\fontsize{12pt}{14pt}\selectfont
+				{\@firstExaminer}
+			\endgroup
+			\vskip -0.15cm
+
+			\noindent\rule{15cm}{0.4pt}
+			
+			\vskip 0.05cm
+
+			\begingroup
+			\fontsize{8pt}{6pt}\selectfont
+			Second Examiner // Zweitprüferin/Zweitprüfer
+			\endgroup
+
+			\vskip -0.15cm
+
+			\begingroup
+			\fontsize{12pt}{14pt}\selectfont
+				{\@secondExaminer}
+			\endgroup
+			\vskip -0.15cm
+
+			\noindent\rule{15cm}{0.4pt}
+			
+			\vskip 0.05cm
+
+			\begingroup
+			\fontsize{8pt}{6pt}\selectfont
+			Matriculation Number // Matrikelnummer
+			\endgroup
+
+			\vskip -0.15cm
+
+			\begingroup
+			\fontsize{12pt}{14pt}\selectfont
+				{\@matrikelnr}
+			\endgroup
+			\vskip -0.15cm
+
+			\noindent\rule{15cm}{0.4pt}
+
+			\vskip 0.05cm
+
+			\begingroup
+			\fontsize{8pt}{6pt}\selectfont
+			Date of Submission // Abgabedatum
+			\endgroup
+
+			\vskip -0.15cm
+
+			\begingroup
+			\fontsize{12pt}{14pt}\selectfont
+				{\@submitDate}
+			\endgroup
+			\vskip -0.15cm
+
+			\noindent\rule{15cm}{0.4pt}
+		\restoregeometry
+	\end{titlepage}
+}
+\makeatother

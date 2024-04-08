@@ -1,0 +1,120 @@
+% !TeX root = main.tex
+% Dokumenteinstellungen und Anpassungen
+\input{resources/settings/settings}
+\input{resources/styles/adjustments}
+
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{float}
+\usepackage{color}
+\usepackage{listings}
+\usepackage{eso-pic}
+\newcommand\BackgroundPic{%
+\put(0,0){%
+\parbox[b][\paperheight]{\paperwidth}{%
+\vfill
+\centering
+\includegraphics[width=\paperwidth,height=\paperheight,%
+keepaspectratio]{resources/images/deckblatt.png}%
+\vfill
+}}}
+
+\include{titles/graduation}
+% Variablen für das Deckblatt
+\gradeType{Bachelor of Science (B.Sc.)}
+\germanTitle{Wissenschaftliche Softwareentwicklung eines Convolutional Neuronal Networks für die Rekonstruktion fehlender Daten einer Wettermessstation unter Verwendung von Numerischen Modelldaten}
+\englishTitle{Scientific software development of a Convolutional Neural Network for the reconstruction of missing data from a weather measurement station using numerical model data.}
+\authorFirstname{Timo}
+\authorLastname{Wacke}
+\authorBirthplace{Hamburg}
+\discipline{Computer Science // Informatik}
+\courseOfStudies{Computing in Science (Physics Specialization)}
+\matrikelnr{7434883}
+\submitDate{10.06.2024}
+\firstExaminer{Prof. Dr. Thomas Ludwig}
+\secondExaminer{Dr. Christopher Kadow}
+
+
+\include{titles/eidesstatt}
+\place{Hamburg}
+
+
+\lstset{literate=%
+  {Ö}{{\"O}}1
+  {Ä}{{\"A}}1
+  {Ü}{{\"U}}1
+  {ß}{{\ss}}1
+  {ü}{{\"u}}1
+  {ä}{{\"a}}1
+  {ö}{{\"o}}1
+}
+
+% Javascript als Sprache für die lstings
+\lstdefinelanguage{JavaScript}{
+  keywords={typeof, new, true, false, catch, function, return, null, catch, switch, var, if, in, while, do, else, case, break, that, globals, let, const},
+  keywordstyle=\color{blue}\bfseries,
+  ndkeywords={class, export, boolean, throw, implements, import, this},
+  ndkeywordstyle=\color{darkgray}\bfseries,
+  identifierstyle=\color{black},
+  sensitive=false,
+  comment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  commentstyle=\color{gray}\ttfamily,
+  stringstyle=\color{red}\ttfamily,
+  morestring=[b]',
+  morestring=[b]"
+}
+\lstset{
+    language=JavaScript,
+    numbers=none,
+    frame=leftline,
+    tabsize=2,
+    rulesepcolor=\color{gray},
+    rulecolor=\color{black},
+    captionpos=b,
+    breaklines=true,
+    breakatwhitespace=false,
+}
+
+% Neuer Befehl um Subsubsubkapitel schreiben zu können
+\newcommand{\subsubsubsection}[1]{\paragraph{#1}\mbox{}\\}
+\setcounter{secnumdepth}{4}
+\setcounter{tocdepth}{4}
+\begin{document}
+
+% Entfernen der Seitenzahlen und BackroundPic als Hintergrund nutzen
+\pagenumbering{gobble}
+\AddToShipoutPicture{\BackgroundPic}
+
+% Titelblatt erzeugen
+\maketitle
+\newpage
+
+% Eidesstattliche Erklärung erzeugen
+\makeeidesstatt
+\thispagestyle{empty}
+
+% Abstract und Inhaltsverzeichnisse einfügen (Numerierung römisch ab Inhaltsverzeichnis)
+\input{chapter/0_Abstract.tex}
+\ClearShipoutPicture
+\thispagestyle{empty}
+\newpage
+\pagenumbering{Roman}
+\tableofcontents
+\newpage
+\listoffigures
+\newpage
+
+% Kapitel einfügen
+\pagenumbering{arabic}
+\input{chapter/1_Introduction.tex}
+\input{chapter/2_Design.tex}
+\input{chapter/3_Theoretical.tex}
+\input{chapter/4_Results.tex}
+\input{chapter/5_Implementation.tex}
+\input{chapter/6_Discussion.tex}
+
+% Bibliografie im .bib Format einfügen
+\bibliography{bachelorarbeit}
+
+\end{document}

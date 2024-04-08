@@ -1,0 +1,37 @@
+# LaTeX specific
+*.aux
+*.log
+*.out
+*.toc
+*.gz
+*.bbl
+*.blg
+*.synctex.gz
+*.fdb_latexmk
+*.fls
+*.dvi
+*.pdfsync
+*.acn
+*.acr
+*.alg
+*.glg
+*.glo
+*.gls
+*.ist
+*.lof
+*.lot
+*.maf
+*.mtc
+*.mtc0
+*.nlo
+*.nls
+*.pyg
+*.run.xml
+*.swp
+*.synctex(busy)
+*.synctex.gz(busy)
+*.xdy
+*.tdo
+
+# Build files
+build/

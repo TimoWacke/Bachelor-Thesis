@@ -1,6 +1,12 @@
 \section{Conceptual Framework and Methodology}
 \label{sec:design}
 
+\subsection{Concept}
+
+\begin{figure}
+    
+\end{figure}
+
 \subsection{Data Acquisition and Preprocessing}
 The first step of the proposed methodology involves acquiring a dataset from a weather station. This dataset serves as the foundation for training and testing the Convolutional Neural Network (CNN). Upon obtaining the dataset, it is determined where temperature data is missing. While the weather station dataset is minute-based, data could be missing only for a few minutes within an hour instead of the full hour. To simplify the problem, the mean of the temperature values for each hour is calculated. And if all temperature values are missing for an hour, the hour is marked as missing. As explained in the introduction, the ERA5 reanalysis is hourly and covers the globe. The ERA5 data for the grid cells surrounding the weather station, at all the timesteps since the weather station data starts is obtained.
 

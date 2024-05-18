@@ -77,7 +77,33 @@ keepaspectratio]{resources/images/deckblatt.png}%
     breakatwhitespace=false,
 }
 
-% Neuer Befehl um Subsubsubkapitel schreiben zu können
+\lstdefinelanguage{Python}{
+    keywords={self, def, class, import, from, if, else, elif, for, while, return, True, False, None},
+    keywordstyle=\color{blue}\bfseries,
+    ndkeywords={},
+    ndkeywordstyle=\color{darkgray}\bfseries,
+    identifierstyle=\color{black},
+    sensitive=true,
+    comment=[l]{\#},
+    morecomment=[s]{"""}{"""},
+    commentstyle=\color{gray}\ttfamily,
+    stringstyle=\color{orange}\ttfamily,
+    morestring=[b]',
+    morestring=[b]"
+}
+
+\lstset{
+    language=Python,
+    numbers=none,
+    frame=leftline,
+    tabsize=2,
+    rulesepcolor=\color{gray},
+    rulecolor=\color{black},
+    captionpos=b,
+    breaklines=true,
+    breakatwhitespace=false,
+}
+
 \newcommand{\subsubsubsection}[1]{\paragraph{#1}\mbox{}\\}
 \setcounter{secnumdepth}{4}
 \setcounter{tocdepth}{4}
@@ -96,7 +122,7 @@ keepaspectratio]{resources/images/deckblatt.png}%
 \thispagestyle{empty}
 
 % Abstract und Inhaltsverzeichnisse einfügen (Numerierung römisch ab Inhaltsverzeichnis)
-\input{chapter/0_Abstract.tex}
+\input{chapter/Abstract.tex}
 \ClearShipoutPicture
 \thispagestyle{empty}
 \newpage
@@ -108,12 +134,13 @@ keepaspectratio]{resources/images/deckblatt.png}%
 
 % Kapitel einfügen
 \pagenumbering{arabic}
-\input{chapter/1_Introduction.tex}
-\input{chapter/2_Design.tex}
-\input{chapter/3_Theoretical.tex}
-\input{chapter/4_Results.tex}
-\input{chapter/5_Implementation.tex}
-\input{chapter/6_Discussion.tex}
+\input{chapter/Introduction.tex}
+\input{chapter/3D_printed_stations.tex}
+\input{chapter/Design.tex}
+\input{chapter/Theoretical.tex}
+\input{chapter/Results.tex}
+\input{chapter/Implementation.tex}
+\input{chapter/Discussion.tex}
 
 % Bibliografie im .bib Format einfügen
 \bibliography{bachelorarbeit}

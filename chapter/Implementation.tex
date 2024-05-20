@@ -127,12 +127,16 @@ cdo -f nc copy {source_path} {nc_path}
 
 However to have the temperature at surface variable name unified as "tas" in the NetCDF file, the following command can be used:
 
-\begin{lstlisting}
+\begin{lstlisting}[caption=Renaming Variable in NetCDF File, label=lst:rename_variable]
+    import xarray as xr
+    import subprocess
+
     def _rename_variable(self, var_name, tas_name, input, output):
         rename_variable_command = \
             f"cdo chname,{var_name},{tas_name} {input_path} {output_path}"
         subprocess.run(rename_variable_command, shell=True)
-
+        
+    ds = xr.open_dataset(input_path)
     if 'var167' in ds.variables:
         _rename_variable('var167', 'tas', input_path, output_path)
     elif '2t' in ds.variables:

@@ -9,7 +9,9 @@
 \usepackage{float}
 \usepackage{color}
 \usepackage{listings}
+\usepackage{animate}
 \usepackage{eso-pic}
+
 \newcommand\BackgroundPic{%
 \put(0,0){%
 \parbox[b][\paperheight]{\paperwidth}{%
@@ -94,11 +96,8 @@ keepaspectratio]{resources/images/deckblatt.png}%
 
 \lstset{
     language=Python,
-    numbers=none,
-    frame=leftline,
+    numbers=left,            % Line numbers on the left side
     tabsize=2,
-    rulesepcolor=\color{gray},
-    rulecolor=\color{black},
     captionpos=b,
     breaklines=true,
     breakatwhitespace=false,

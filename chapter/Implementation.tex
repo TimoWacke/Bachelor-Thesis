@@ -4,8 +4,8 @@
 
 \subsection{Introduction}
 
-The "Climate Reconstruction AI" Module is used, such that the actual setup of the neural net, training and evaluation afterwards is outsourced. Thus the process for a single specific dataset of one station could be written pretty straight forward with a NetCDF file of the station data ahead, if there is sufficient access to ERA5 Data. A jupyter notebook could be sufficient as a way to start. However once dealing with different stations, different ERA5 files need to be stored, and the failes that have been prepared for submission into CRAI need to have some kind of management and the "trainings-args" for CRAI need to be adapted each time. Thus it appears natural to implement a set of functions and structure the process through an object oriented approach. This allows to control different but similar pipelines with a few lines of code, either through a script, initiated by an api or in a jupyter notebook.
-The user then needs to take minimal care of the file management and temporarly folders, as well and it is quite straight forward to pass the different objects its input and output data. When the functions are outlined in the follwing sections, it might not be explicitly stated what temp folders or output folders are created but it is a crucial feature of the implementation.
+The "Climate Reconstruction AI" (CRAI) Module is used, such that the actual setup of the neural net, training and evaluation afterwards is outsourced. Thus the process for a single specific dataset of one station could be written pretty straight forward with a NetCDF file of the station data ahead, if there is sufficient access to ERA5 Data. A jupyter notebook could be sufficient as a way to start. However once dealing with different stations, different ERA5 files need to be stored, and the failes that have been prepared for submission into CRAI need to have some kind of management and the "trainings-args" for CRAI need to be adapted each time. Thus it appears natural to implement a set of functions and structure the process through an object oriented approach. This allows to control different but similar pipelines with a few lines of code, either through a script, initiated by an api or in a jupyter notebook.
+The user then needs to take minimal care of the file management and temporary folders, as well and it is quite straightforward to pass the different objects its input and output data. When the functions are outlined in the follwing sections, it might not be explicitly stated what temp folders or output folders are created but it is a crucial feature of the implementation.
 
 \begin{figure}
     \centering
@@ -164,7 +164,11 @@ When evaluating the model not for validation but to infill missing values, the E
 
 Because CRAI is using the encode, decode architecture with connected layers as described in \autoref{subsec:cnn}, the output file in NetCDF format that the model produces includes not only one temperature value per timestep but has the same dimensions as the input ERA5 file meaning it uses the same 8x8 grid with 64 temperature values. However since it has been trained on input files where the groudtruth was also laid on the 8x8 grid, the 64 temperature values in the output data of the model tend to be extremely similar. They need to be reshaped however to the original dimensions of the station data, which is a 1D array with 1 temperature value per timestep. This is done by taking the mean of the 64 values. 
 
-\subsection{Executer Classes, Training, Infilling, Validation}
+\section{Process Orchestration + API \& Webinterface}
 
-\subsection{API \& Webinterface}
+\subsection{Executer Classes, (Training, Infilling, Validation)}
+
+\subsection{API Endpoints}
+
+\subsection{Webinterface}
 

@@ -64,9 +64,9 @@ It is most commonly aggregated by taking the maximum value of the submatrix beca
 \end{figure}
 
 
-For the 8x8 grid cells of the ERA5 data, that is used as input in the laid out approach (see \autoref{sec:design}), the architecture of the CNN could include a maximum of 3 pooling layers, reducing the input data to a 1x1 matrix as seen in \autoref{fig:max_pooling}. \autoref{fig:max_pooling} just illustrates the downsampling of the data, in the actual architecture pooling layers always follow convolutional layers and are never applied directly after each other as seen in \autoref{fig:encoder_architecture}. 
+For the 8x8 grid cells of the ERA5 data, that is used as input in the laid out approach (see \autoref{subsec:data_preprocessing}), the architecture of the CNN could include a maximum of 3 pooling layers, reducing the input data to a 1x1 matrix as seen in \autoref{fig:max_pooling}. \autoref{fig:max_pooling} just illustrates the downsampling of the data, in the actual architecture pooling layers always follow convolutional layers and are never applied directly after each other as seen in \autoref{fig:encoder_architecture}. 
 
-\subsection*{Upscaling Layer}
+\subsubsection*{Upscaling Layer}
 
 \subsubsection*{Skip Connections}
 

@@ -66,31 +66,85 @@ The Barbados station also only had 2022 and 2023 as a complete available years, 
 % Vienna 12477, 9593 without 2019 -> gives a ratio for validation data of 0.23
 
 
-\subsection{Validation of the Model}
-\subsection*{Marshall Station}
+\subsection{Validation of the Models}
+
+For the training and validation data, the corresponding temperature data of the 64 ERA5 grid cells in the regions of each station was obtained. The 8x8 grid cells were chosen to be centered as good as possible around each weather station, given the specific ERA5 coordinates. The ERA5 data also was preprocessed using the code pipeline described in \autoref{sec:implementation} and then the CNN with the architecture described in \autoref{subsec:cnn} was trained on the training data. The training was done in batches of 4 datapoints, which are in hour case the hourly steps, at a time. The model was trained for up to 300,000 iterations, which therefore are depending on the dataset size between 8 and 31 epochs. The training was done on the Supercomputer "Levante" of the German Climate Computing Center, which made it possible to complete training runs in just a few hours. However, the training can be done in the same way on almost any machine. During the training, in the scientific process, where the approach is un-proven to work, it is especially important to validate multiple times during the training to calculate not only the loss function over the model for the training data, but over the validation data. This is done to prevent overfitting, a so called phenomena where the model in the aim to minimize the loss for the training data, which is what training using backpropagation is exactly at it's core, starts to learn the noise and any potential specifics of the training data so well, that it loses it's ability to generalize and the loss for the validation data starts to increase. This is a sign that the model is overfitting and the training should be stopped. The model that is then saved is the one that performed best on the validation data. To allow for that, not only was the ERA5 data for the training data provided to the machine learning architecture but also the validation ERA5 data paired with the expected output for these, the masked measurements of the weather station.
+
+Training runs have been completed for all stations with up to 1 million iterations, but the best models were in most cases already found between 300 and 500 thousand iterations. The models were then applied to the ERA5 data at all the hours in the validation data set of each station, to analyze the performance of the model for each station. 
+% As numerical measures of quality, the Root Mean Squared Error (RMSE) and the correlation coefficient were calculated. The RMSE is a measure of the differences between predicted and observed values, while the correlation coefficient quantifies the strength and direction of the linear relationship between the two datasets. 
+
+\subsubsection*{Root Mean Squared Error (RMSE)}
+
+To quantify how far apart the reconstructed temperature series $\hat{y}$ is from the measured temperature series $y$, where both series have $n$ different timesteps and thus can be seen as vectors most commonly the root mean squared error (RMSE) comes to help, which is strongly connected to the Euclidean norm of the difference between both vectors $\hat{y} - y$. However, a simple mean absolute error (MAE), also called the Manhattan norm could seem most intuitive and easiest to understand. It would be calculated just by adding all absolute differences up before dividing it by the length of the series. The RMSE is favored in machine learning and statistics because it penalizes larger differences more than smaller ones, which is more in line with the human perception of errors. 
+
+\begin{equation}
+    \text{RMSE} = \sqrt{\frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2}
+    \label{eq:rmse}
+\end{equation}
+
+\begin{equation}
+    \text{MAE} = \frac{1}{n} \sum_{i=1}^{n} |y_i - \hat{y}_i|
+    \label{eq:mae}
+\end{equation}
+
+When converting \autoref*{eq:rmse}, it can be seen how the RMSE is connected to the Euclidean norm:
+
+\begin{equation}
+  \text{RMSE} \cdot \sqrt{n}= \sqrt{n} \sqrt{\sum_{i=1}^{n} (y_i - \hat{y}_i)^2} = \| y - \hat{y} \|_2  
+  \label{eq:rmse_euclid}
+\end{equation}
+
+The Euclidean norm $\| y - \hat{y} \|_2$, of a coordinate in our case the error $\hat{y} - y$ can be imagined as the diagonal distance between the origin and the point with these coordinates. For demonstration purposes, a right triangle in 2-dimensional space can be imagined with the errors at 2 validation timesteps as the legs. The Euclidian norm over both errors would be proportional to the hypothenuse of that triangle which is more dependent on the length of the longer leg than the shorter one. The Manhattan norm (\autoref{eq:mae}), on the other hand, which received its name from the gridded street system of Manhattan is not based on the diagonal distance, but proportional to the distance a taxicab in Manhattan would have to drive to travel along the hypothenuse, the equally weighted sum of the legs.
+
+\subsubsection*{Pearson Correlation Coefficient}
+
+The Pearson correlation coefficient (in the following called correlation coefficient), is a measure of the strength and direction of a linear relationship between two variables. It ranges from -1 to 1, where 1 indicates a perfect positive linear relationship, -1 is a perfect negative linear relationship, and 0 is no linear relationship. The correlation coefficient is calculated as follows:
+
+\begin{equation}
+    \text{Correlation Coefficient} = \frac{\sum_{i=1}^{n} (y_i - \bar{y})(\hat{y}_i - \bar{\hat{y}})}{\sqrt{\sum_{i=1}^{n} (y_i - \bar{y})^2 \sum_{i=1}^{n} (\hat{y}_i - \bar{\hat{y}})^2}}
+    \label{eq:correlation}
+\end{equation}
+    
+Where $\bar{y}$ and $\bar{\hat{y}}$ are the mean values of the measured and the model output temperature series, respectively. The correlation coefficient is a measure of how well the model output follows the general trend of the measured data.
+
+
+\subsection*{Marshall-Station}
 
 \begin{figure}
     \centering
     \includegraphics[width=\textwidth]{resources/images/charts/marshall_eval_grib_final/Marshall, Difference to Measurements.png}
     \caption{Difference between reconstructed and measured temperature for Marshall-Station}
+    \label{fig:marshall_diff}
 \end{figure}
+
+To begin with Marshall the occasion with the most available trainingdata, all by the model predicted temperatures for the hourly measurements of the validation dataset have been plotted in \autoref{fig:marshall_diff} with a blue line against the ground truth in black. Given the high number of hourly timesteps along the x-axis spanning the year 2021, for the sake of readability, the temperature differentials are plotted on the y-axis instead of the absolute temperatures. Above the chart the over the whole hourly validation data calculated RMSE and Correlation of the reconstructed series are written. The RMSE for the Marshall station is 2.02°C, which is the highest value among the three weather stations, which models have been trained for. To compare the RMSE to what a direct read out of ERA5 would have been, the plot includes in red the temperature at each timestep at the nearest ERA5 grid point, at the coordinates 39.950° N, 106.196° W. The grid point's location is exactly the location of the weather station in Marshall (see \autoref{fig:available_measurements_marshall}). But the RMSE between the measurements and the temperature time series of that ERA5 grid point, is 4.56°C, which is more than twice as high. Considering that the model was trained on the ERA5 data of the 8x8 grid cells around the station, the model was able to reduce the error significantly. The ERA5 data, as seen in the chart has a substantial low-bias compared to the station which directly relates to the fact that the grid cell of the station already reaches into the Rocky Mountains, as described above. Thus it is especially important, that the reconstruction not just has a lower RMSE which could be achieved in this case just by correcting the low-bias but also beats it's training data in terms of correlation. The calculated correlation coefficient over the validation year 2021 on an hourly basis for the reconstructed temperature and the measurements is 0.982 compared to 0.965 for the ERA5 nearest grid point a significant improvement.
 
 \begin{figure}
     \centering
     \includegraphics[width=\textwidth]{resources/images/charts/marshall_eval_grib_final/Marshall - Daily mean.png}
     \caption{Reconstructed temperature vs measured temperature for Marshall-Station (Daily mean)}
+    \label{fig:marshall_daily}
 \end{figure}
+
+Even better is the performance of the model when the hourly values are combined again with daily means, as in \autoref{fig:marshall_daily}. The chart shows the daily mean temperature of the three different series, known from the previous chart over 2021. In this case, the reduced number of timesteps allows for an absolute temperature scale on the y-axis and therefore makes the performance of the model visually appealing as well, the RMSE on a daily basis for the prediction is almost halved the original one at 1.05°C, while the correlation coefficient is even higher as well at 0.995, the ERA5 correlation coefficient improved significantly as well, however, the RMSE didn't as the ERA5 data is impacted drastically by the low-bias.
 
 \begin{figure}
     \centering
     \includegraphics[width=\textwidth]{resources/images/charts/marshall_eval_grib_final/Marshall, Average Diurnal Cycle.png}
     \caption{Reconstructed temperature vs measured temperature for Marshall-Station (Average Diurnal Cycle)}
+    \label{fig:marshall_diurnal}
 \end{figure}
+
+\autoref{fig:marshall_diurnal} makes clear, that the improvement in RMSE and correlation coefficient of the daily analysis was not caused by potential issues in the model to predict the diurnal cycle correctly but by noise reduction in general. In \autoref{fig:marshall_diurnal} the average diurnal cycle of the reconstructed temperature is plotted against the measured temperature and the temperature series of ERA5. This means that over all the days in 2021, for each of the 24 hours, an average temperature was calculated and plotted for the three series. It can be observed that ERA5 has a higher amplitude in the diurnal cycle than the weather station and that the model is capable of correcting that.
+
+It is not surprising, that the RMSE and correlation coefficient improve the more the data is aggregated, so it is also important to look at the hourly values again and go into detail. To allow the details to appear on a plot, the x-axis can be cropped to a shorter period, as in \autoref{fig:marshall_7day}, where the x-axis includes 168 hours, equivalent to 7 days. The chart is chosen to be representative, while some weeks have a better fitting than others.
+
 
 \begin{figure}
     \centering
     \includegraphics[width=\textwidth]{resources/images/charts/marshall_eval_grib_final/Marshall, 7 Day Period_1_2_3.png}
     \caption{Reconstructed temperature vs measured temperature for Marshall-Station (7 Day Period)}
+    \label{fig:marshall_7day}
 \end{figure}
 
 \begin{figure}
@@ -99,7 +153,6 @@ The Barbados station also only had 2022 and 2023 as a complete available years, 
     \caption{Reconstructed temperature vs measured temperature for Marshall-Station (Monthly mean)}
 \end{figure}
 
-\newpage
 
 \subsection*{Vienna Station}
 
@@ -132,7 +185,3 @@ The Barbados station also only had 2022 and 2023 as a complete available years, 
 \end{figure}
 
 \newpage
-
-\subsection{Experimenting with time context}
-
-\subsection{How to improve results}

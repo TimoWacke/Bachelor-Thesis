@@ -4,8 +4,9 @@
 
 \subsection{Introduction}
 
-The "Climate Reconstruction AI" (CRAI) Module is used, such that the actual setup of the neural net, training and evaluation afterwards is outsourced. Thus the process for a single specific dataset of one station could be written pretty straight forward with a NetCDF file of the station data ahead, if there is sufficient access to ERA5 Data. A jupyter notebook could be sufficient as a way to start. However once dealing with different stations, different ERA5 files need to be stored, and the failes that have been prepared for submission into CRAI need to have some kind of management and the "trainings-args" for CRAI need to be adapted each time. Thus it appears natural to implement a set of functions and structure the process through an object oriented approach. This allows to control different but similar pipelines with a few lines of code, either through a script, initiated by an api or in a jupyter notebook.
-The user then needs to take minimal care of the file management and temporary folders, as well and it is quite straightforward to pass the different objects its input and output data. When the functions are outlined in the follwing sections, it might not be explicitly stated what temp folders or output folders are created but it is a crucial feature of the implementation.
+Given that the machine learning part of the software is modulized as "Climate Reconstruction AI" (CRAI), such that the actual setup of the neural net, training and evaluation afterward is outsourced. Thus the process for a single specific dataset of one station could be written pretty straightforward with a NetCDF file of the station data ahead, if there is sufficient access to ERA5 Data. A jupyter notebook could be sufficient as a way to start. However once dealing with different stations, different ERA5 files need to be stored, and the files that have been prepared for submission into CRAI need to have some kind of management and the "training-args" for CRAI need to be adapted each time. Thus it appears natural to implement a set of functions and structure the process through an object-oriented approach. This allows to control different but similar pipelines with a few lines of code, either through a script, initiated by an api or in a jupyter notebook.
+This chapter is about laying the foundation through the implementation of the different steps of the pipeline as classes and functions, while in chapter \autoref{sec:process_orchestration} the next abstraction level of the software into classes that handle the execution of the different steps and the interaction with the user through an API and a webinterface is described.
+The following subsections highlight the key steps of the pipeline and how their functionality evolves. It is not covering the detailed embedding of the methods in their classes, nor is explicitly mentioned where temporary folders would be created to establish a philosophy where each step of the pipeline is implemented independently and can be connected in a higher level class. The methods are not necessarily designed to be used in any possible order and more in the sense of the desired pipelines, but the modularity allows for a better understanding and cleaner code, which is essential when developing another layer of abstraction later.
 
 \begin{figure}
     \centering
@@ -18,7 +19,7 @@ The user then needs to take minimal care of the file management and temporary fo
     \centering
     \includegraphics[width=450pt]{resources/images/infilling_pipeline.png}
     \caption{Pipeline to reconstruct weather data using a model}
-    \label{fig:training_pipeline}
+    \label{fig:infilling_pipeline}
 \end{figure}
 
 \subsection{Stationdata Submission \& Conversion}
@@ -158,17 +159,18 @@ The station data should have the same dimensions as the ERA5 data, so a method i
 
 For evaluating the model, in a validation procedure the same preparation of ERA5 data is done, however instead of passing the station data as expected output to the model, the file will not be filled with the measured values but with NaNs.
 
-When evaluating the model not for validation but to infill missing values, the ERA5 data needs to be prepared differently of course. Instead of requesting monthly data from the cdsapi, it is requesing only the missing hours day by day, such that the timedimesion is directly as desired, and preprocessing only needs to handle conversion and geographical cropping.
+When evaluating the model not for validation but to infill missing values, the ERA5 data needs to be prepared differently of course. Instead of requesting monthly data from the cdsapi, it is requesting only the missing hours day by day, such that the time-dimesion is directly as desired, and preprocessing only needs to handle the conversion and geographical cropping.
 
-\subsection{CRAI - Climate Reconstruction AI}
+\subsection{Output of the model}
 
 Because CRAI is using the encode, decode architecture with connected layers as described in \autoref{subsec:cnn}, the output file in NetCDF format that the model produces includes not only one temperature value per timestep but has the same dimensions as the input ERA5 file meaning it uses the same 8x8 grid with 64 temperature values. However since it has been trained on input files where the groudtruth was also laid on the 8x8 grid, the 64 temperature values in the output data of the model tend to be extremely similar. They need to be reshaped however to the original dimensions of the station data, which is a 1D array with 1 temperature value per timestep. This is done by taking the mean of the 64 values. 
 
-\section{Process Orchestration + API \& Webinterface}
+\subsection{Plotting for validation}
 
-\subsection{Executer Classes, (Training, Infilling, Validation)}
+% def era5_vs_reconstructed_comparision_to_df(era5_path, reconstructed_path, measurements_path):
 
-\subsection{API Endpoints}
 
-\subsection{Webinterface}
+% def plot_n_steps_of_df(df, coords, as_delta, n=None, title=None, save_to=False):
+
+\subsection{Infilling for reconstruction}
 

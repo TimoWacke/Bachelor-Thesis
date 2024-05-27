@@ -3,58 +3,6 @@
 \label{sec:process_orchestration}
 \subsection{Executer Classes: Training, Infilling, Validation}
 
-class TrainingExecuter():
-    async def execute(self):
-    self.get_era5_for_station()
-    self.progress.update_phase("Preparing Training Set")
-    self.transform_station_to_expected_output()
-    self.copy_train_folder_as_val_folder()
-    path = self.get_train_args_txt()
-    model_dir_path = await self.crai_train(path)
-    self.progress.update_phase("")
-    return self.make_zip_folder(model_dir_path)
-
-class EvaluationExecuter:
-    def execute(self):
-    self.get_era5_for_station()
-    self.create_cleaned_nc_file()
-    path = self.get_eval_args_txt()
-    return self.crai_evaluate(path)  
-
-class ValidationExecuter():
-
-    self.get_era5_for_station()
-    self.validate()
-
-    def validate(self):
-            # to be used after execute
-            assert os.path.exists(self.model_path), "Model not found after training"
-            assert os.path.exists(self.era5_path)
-
-            self.progress.update_phase("Evaluating")
-
-            evaluation = EvaluationExecuter(
-                station=self.station,
-                model_path=self.model_path
-            )
-            # don't run evaluation.execute() because it will optain ERA5 to infill gaps
-
-            # copy the era5 training data to the evaluation directory
-            shutil.copy(self.era5_path, evaluation.era5_path)
-
-            # prepare expected output cleaned
-            evaluation.create_cleaned_nc_file()
-            args_path = evaluation.get_eval_args_txt()
-            reconstructed_path = evaluation.crai_evaluate(args_path)
-
-            self.progress.update_phase("Plotting")
-
-            df = era5_vs_reconstructed_comparision_to_df(
-                era5_path=self.era5_path,
-                reconstructed_path=reconstructed_path,
-                measurements_path=self.station_nc_file_path
-            )
-
 
 \subsection{Webinterface}
 

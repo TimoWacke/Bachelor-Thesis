@@ -11,7 +11,7 @@ CNNs are a type of deep learning architecture inspired by the visual cortex of a
 
 Application of CNNs in climate science has yielded several notable contributions, including the reconstruction of the El Nino event of 1877 by Kadow et al. despite extremely limited data availability. \cite{kadow2020}
 
-In the context of this work an architecture introduced by (\cite{ronneberger2015}) is used, which consists of an encoder and a decoder part as seen in \autoref{fig:u_net}. Due to it's shape it is called U-Net. The encoder part consists of convolutional layers and pooling layers, while the decoder part consists of upscaling layers and in this case, skip connections as proposed by \cite{liu2018inpaining}.
+In the context of this work, an architecture introduced by (\cite{ronneberger2015}) is used, which consists of an encoder and a decoder part as seen in \autoref{fig:u_net}. Due to its shape, it is called U-Net. The encoder part consists of convolutional layers and pooling layers, while the decoder part consists of upscaling layers and in this case, skip connections as proposed by \cite{liu2018inpaining}.
 
 \subsubsection*{Convolutional Layer}
 \begin{figure}
@@ -98,7 +98,7 @@ The now-explained steps used in the architecture combined will return for any in
 
 ?? Question: What else weights are there? The architecture does not have fully connected layers, does it? So no weights there. What about the pooling and upscaling layers? Are there weights in the activation function?
 
-With the correct weights found the prediciton should be ideally the same as the target data. This is what the training process is for which is supervised based on the available measurements, the ground truth (see \autoref{fig:supervised_learning}). 
+With the correct weights found the prediction should be ideally the same as the target data. This is what the training process is for which is supervised based on the available measurements, the ground truth (see \autoref{fig:supervised_learning}). 
 
 \subsubsection*{Backpropagation and Loss Function}
 
@@ -114,12 +114,18 @@ To minimize any differences between ground through and prediction, the differenc
     \label{fig:supervised_learning}
 \end{figure}
 
+\newpage
 
-\subsection{Reanalysis - ERA5}
+\subsection{Atmospheric Reanalysis}
 
-Atmospheric reanalysis is an effort to combine measurements with numerical models to estimate the state of the atmosphere at any given time, opposing missing measurements. The method is based on a complex numerical model, simulating the physical rules of the atmosphere. As with any numerical model, degrees of freedom, allow for adjustments of parameters, which are chosen in such a way that the model output matches the actual measurements wherever they are available in space and time. 
+%Atmospheric reanalysis is an effort to combine measurements with numerical models to estimate the state of the atmosphere at any given time. 
+Combining past weather observations with numerical model-based weather predictions (NWP)
+is a data assimilation technique called atmospheric reanalysis when applied over a long period with a consistent data assimilation system \cite{Poli2016ERA20C, ECMWF2020dataassimilation}. The numerical models have degrees of freedom, allowing for adjustments of parameters, which are chosen in such a way that the model output matches the actual measurements wherever they are available in space and time, may it be from a weather station or a satellite.
 
-The ERA5 reanalysis is a product of the European Centre for Medium-Range Weather Forecasts (ECMWF) and is the fifth generation of the ERA reanalysis series. It is the most complete and accurate data assimilation project available \cite{Hersbach2020ERA5quality}. Which makes it the best choice as input data in this approach. As it is the best available data in remote locations such as in East Africa \cite{Gleixner2020ERA5africa}, where the 3D printed weather stations are specifically supposed to make an impact it can be used as a type of benchmark to compare the results of the infilling approach to.
+An institution providing such reanalyses is the European Centre for Medium-Range Weather Forecasts (ECMWF), and over the years, they have produced several reanalyses, with the most recent one being ERA5 \cite{Hersbach2020ERA5quality}.
 
-As mentioned above the data is available in grid cells of 0.25° x 0.25°, which is approximately 28 km x 28 km at the equator. The data assimilation takes place in 4 dimensions, as not only the latitude and longitude over time are taken into account but also multiple pressure levels in the atmosphere. This gives the techniques used for ERA5 the name 4D-Var \cite{era5}
-The available variables in the ERA5 reanalysis are numerous, but for this work, only the 2m temperature is used as input to the neural network. Which is the temperature weather stations aim to measure. However, for similar approaches or extended approaches, other variables such as different wind-(component) speeds, precipitation, or humidity and solar radiation could be used as well.
+Several organizations besides ECMWF produce global atmospheric reanalyses. To name a few leading: MERRA-2 from NASA's Global Modeling and Assimilation Office (GMAO) \cite{Gelaro2017}, JRA-55 from the Japan Meteorological Agency (JMA) \cite{Kobayashi2015}, and CFSR (version 2) from the National Centers for Environmental Prediction (NCEP) \cite{Saha2014}.
+
+ECMWF began its reanalysis efforts with the FGGE project in 1979, followed by ERA-15 in the mid-1990s, ERA-40 in the early 2000s, ERA-Interim in 2008, and the most recent ERA5 reanalysis in 2017 \cite{Hersbach2020ERA5quality}. ERA5, the fifth generation reanalysis from ECMWF, surpasses ERA-Interim in accuracy and completeness \cite{Hersbach2020ERA5quality}, which was previously considered the most accurate global reanalysis product \cite{Beck2019interimWasBest}. This makes ERA5 the optimal choice for input data in this work. ERA5's improved accuracy over ERA-Interim is particularly notable in East Africa, where weather stations are sparse and the 3D-printed weather stations aim to make a significant impact \cite{Gleixner2020ERA5africa}. This justifies using ERA5 as a benchmark for comparing the accuracy of the reconstructions produced in this work.
+
+The ERA5 data is available in grid cells of 0.25° x 0.25°, approximately 28 km x 28 km at the equator, and involves four-dimensional data assimilation, considering latitude, longitude, time, and multiple pressure levels in the atmosphere. The technique used for ERA5 is known as 4D-Var \cite{era5}. Although ERA5 offers numerous variables, this work utilizes only the 2-meter temperature as input for the neural network, corresponding to the measurements targeted by the 3D-printed weather stations. However, for similar or extended approaches, other variables such as wind components and solar radiation could also be considered.

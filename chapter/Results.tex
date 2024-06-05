@@ -110,7 +110,7 @@ RMSE quantifies proximity between two series in terms of distance (refer to \aut
 Conversely, the correlation coefficient gauges the model's fidelity to the overall trend of the observed data (as depicted in \autoref*{fig: high_corr}).
 Notably, high correlation can coexist with significant distance between series.
 
-\begin{figure}[H]
+\begin{figure}
     \centering
     \begin{subfigure}{0.35\textwidth}
         \centering
@@ -168,112 +168,168 @@ Where $\bar{y}$ and $\bar{\hat{y}}$ are the mean values of the measured and the 
 
 \begin{figure}
     \centering
-    \includegraphics[width=1.02\textwidth]{resources/images/charts/marshall_eval_grib_final/Marshall, Difference to Measurements.png}
+    \includegraphics[width=1.00\textwidth]{resources/images/charts/marshall_eval_grib_final/Marshall, Difference to Measurements.png}
     \caption{Difference between reconstructed and measured hourly temperature for Marshall-Station}
     \label{fig: marshall_diff}
 \end{figure}
+% RMSE reconstructed: 2.02, RMSE ERA5: 4.56, Correlation reconstructed: 0.982, Correlation ERA5: 0.965
+% ERA5 has a low bias
 
-To begin with Marshall the occasion with the most available training data, all by the model predicted temperatures for the hourly measurements of the validation dataset have been plotted in \autoref{fig: marshall_diff} with a blue line against the ground truth in black. Given the high number of hourly timesteps along the x-axis spanning the year 2021, for the sake of readability, the temperature differentials are plotted on the y-axis instead of the absolute temperatures. Above the chart the over the whole hourly validation data calculated RMSE and Correlation of the reconstructed series are written. The RMSE for the Marshall station is 2.02°C, which is the highest value among the three weather stations, which models have been trained for. To compare the RMSE to what a direct read out of ERA5 would have been, the plot includes in red the temperature at each timestep at the nearest ERA5 grid point, at the coordinates 39.950° N, 106.196° W. The grid point's location is exactly the location of the weather station in Marshall (see \autoref{fig: available_measurements_marshall}). But the RMSE between the measurements and the temperature time series of that ERA5 grid point, is 4.56°C, which is more than twice as high. Considering that the model was trained on the ERA5 data of the 8x8 grid cells around the station, the model was able to reduce the error significantly. The ERA5 data, as seen in the chart has a substantial low-bias compared to the station which directly relates to the fact that the grid cell of the station already reaches into the Rocky Mountains, as described above. Thus it is especially important, that the reconstruction not just has a lower RMSE which could be achieved in this case just by correcting the low-bias but also beats it is training data in terms of correlation. The calculated correlation coefficient over the validation year 2021 on an hourly basis for the reconstructed temperature and the measurements is 0.982 compared to 0.965 for the ERA5 nearest grid point a significant improvement.
+To begin with Marshall the occasion with the most available training data, all by the model predicted temperatures for the hourly measurements of the validation dataset have been plotted in \autoref{fig: marshall_diff} with a blue line against the ground truth in black. Given the high number of hourly timesteps along the x-axis spanning the year 2021, for the sake of readability, the temperature differentials are plotted on the y-axis instead of the absolute temperatures.
+Above the chart the over the whole hourly validation data calculated RMSE and Correlation of the reconstructed series are written.
+The RMSE for the Marshall station is 2.02°C, which is the highest value among the three weather stations.
+To compare the RMSE to what a direct read out of ERA5 would have been, the plot includes in red the temperature at each timestep at the nearest ERA5 grid point, at the coordinates 39.950° N, 106.196° W. The grid point's location is exactly the location of the weather station in Marshall (see \autoref{fig: available_measurements_marshall}).
+But the RMSE between the measurements and the temperature time series of that ERA5 grid point, is 4.56°C, which is more than twice as high.
+Considering that the model was trained on the ERA5 data of the 8x8 grid cells around the station, the model was able to reduce the error significantly.
+The ERA5 data, as seen in the chart has a substantial low-bias compared to the station which directly relates to the fact that the grid cell of the station already reaches into the Rocky Mountains, as described above.
+Thus it is especially important, that the reconstruction not just has a lower RMSE which could be achieved in this case just by correcting the low-bias but also beats it is training data in terms of correlation.
+The calculated correlation coefficient over the validation year 2021 on an hourly basis for the reconstructed temperature and the measurements is 0.982 compared to 0.965 for the ERA5 nearest grid point a significant improvement.
 
 \begin{figure}
     \centering
-    \includegraphics[width=1.02\textwidth]{resources/images/charts/marshall_eval_grib_final/Marshall - Daily mean.png}
+    \includegraphics[width=1.00\textwidth]{resources/images/charts/marshall_eval_grib_final/Marshall - Daily mean.png}
     \caption{Reconstructed temperature vs measured temperature for Marshall-Station (Daily mean)}
     \label{fig: marshall_daily}
 \end{figure}
+% RMSE reconstructed: 1.05, RMSE ERA5: 2.02, Correlation reconstructed: 0.995, Correlation ERA5: 0.982
+% ERA5 has a low bias
 
-Even better is the performance of the model when the hourly values are combined again with daily means, as in \autoref{fig: marshall_daily}. The chart shows the daily mean temperature of the three different series, known from the previous chart over 2021. In this case, the reduced number of timesteps allows for an absolute temperature scale on the y-axis and therefore makes the performance of the model visually appealing as well, the RMSE on a daily basis for the prediction is almost halved the original one at 1.05°C, while the correlation coefficient is even higher as well at 0.995, the ERA5 correlation coefficient improved significantly as well, however, the RMSE didn't as the ERA5 data is impacted drastically by the low-bias.
+Even better is the performance of the model when the hourly values are combined again with daily means, as in \autoref{fig: marshall_daily}.
+The chart shows the daily mean temperature of the three different series, known from the previous chart over 2021. In this case, the reduced number of timesteps allows for an absolute temperature scale on the y-axis and therefore makes the performance of the model visually appealing as well, the RMSE on a daily basis for the prediction is almost halved the original one at 1.05°C, while the correlation coefficient is even higher as well at 0.995, the ERA5 correlation coefficient improved significantly as well, however, the RMSE didn't as the ERA5 data is impacted drastically by the low-bias.
 
 \begin{figure}
     \centering
-    \includegraphics[width=1.02\textwidth]{resources/images/charts/marshall_eval_grib_final/Marshall, Average Diurnal Cycle.png}
+    \includegraphics[width=1.00\textwidth]{resources/images/charts/marshall_eval_grib_final/Marshall, Average Diurnal Cycle.png}
     \caption{Reconstructed temperature vs measured temperature for Marshall-Station (Average Diurnal Cycle)}
     \label{fig: marshall_diurnal}
 \end{figure}
+% RMSE reconstructed 0.48, RMSE ERA5 3.78, Correlation reconstructed 0.991, Correlation ERA5 0.985
 
-\autoref{fig: marshall_diurnal} makes clear, that the improvement in RMSE and correlation coefficient of the daily analysis was not caused by potential issues in the model to predict the diurnal cycle correctly but by noise reduction in general. In \autoref{fig: marshall_diurnal} the average diurnal cycle of the reconstructed temperature is plotted against the measured temperature and the temperature series of ERA5. This means that over all the days in 2021, for each of the 24 hours, an average temperature was calculated and plotted for the three series. As all measurements, have been recorded in universal time code (UTC), which is also the time in ERA5, the x-axis is also using UTC, which is apart from the daylight savings time 6 hours ahead of Colorado. It can be observed that ERA5 has a higher amplitude in the diurnal cycle than the weather station and that the model is capable of correcting that.
+\autoref{fig: marshall_diurnal} makes clear, that the improvement in RMSE and correlation coefficient of the daily analysis was not caused by potential issues in the model to predict the diurnal cycle correctly but by noise reduction in general.
+In \autoref{fig: marshall_diurnal} the average diurnal cycle of the reconstructed temperature is plotted against the measured temperature and the temperature series of ERA5.
+This means that over all the days in 2021, for each of the 24 hours, an average temperature was calculated and plotted for the three series.
+As all measurements, have been recorded in universal time code (UTC), which is also the time in ERA5, the x-axis is also using UTC, which is apart from the daylight savings time 6 hours ahead of Colorado.
+It can be observed that ERA5 has a higher amplitude in the diurnal cycle than the weather station and that the model is capable of correcting that.
 
-It is not surprising, that the RMSE and correlation coefficient improve the more the data is aggregated, so it is also important to look at the hourly values again and go into detail. To allow the details to appear on a plot, the x-axis can be cropped to a shorter period, as in \autoref{fig: marshall_7day}, where the x-axis includes 168 hours, equivalent to 7 days. The chart is chosen to be representative, while some weeks have a better fitting than others. In this case, it can be seen, that even in the measurements of 2021, minor gaps happened. For example  
+It is not surprising, that the RMSE and correlation coefficient improve the more the data is aggregated, so it is also important to look at the hourly values again and go into detail. To allow the details to appear on a plot, the x-axis can be cropped to a shorter period, as in \autoref{fig: marshall_7day}, where the x-axis includes 168 hours, equivalent to 7 days.
+The chart is chosen to be representative, while some weeks have a better fitting than others. In this case, it can be seen, that even in the measurements of 2021, minor gaps happened. For example  
 
 
 \begin{figure}
     \centering
-    \includegraphics[width=1.02\textwidth]{resources/images/charts/marshall_eval_grib_final/Marshall, 7 Day Period_1_2_3.png}
+    \includegraphics[width=1.00\textwidth]{resources/images/charts/marshall_eval_grib_final/Marshall, 7 Day Period_1_2_3.png}
     \caption{Reconstructed temperature vs measured hourly temperature for Marshall-Station (7 Day Period)}
     \label{fig: marshall_7day}
 \end{figure}
 
 \begin{figure}
     \centering
-    \includegraphics[width=1.02\textwidth]{resources/images/charts/marshall_eval_grib_final/Marshall - Monthly mean.png}
+    \includegraphics[width=1.00\textwidth]{resources/images/charts/marshall_eval_grib_final/Marshall - Monthly mean.png}
     \caption{Reconstructed temperature vs measured temperature for Marshall-Station (Monthly mean)}
 \end{figure}
+% RMSE reconstructed 0.41, RMSE ERA5 3.60, Correlation reconstructed 0.999, Correlation ERA5 0.998
+% super good result but of course monthly means...
 
-
-\subsubsection*{Vienna-Station}
-
+\subsection{Vienna-Station}
 \begin{figure}[H]
-    \centering
-    \includegraphics[width=1.02\textwidth]{resources/images/charts/vienna_eval_grib_final/Vienna, Difference to Measurements.png}
-    \caption{Difference between reconstructed and measured hourly temperature for Vienna-Station}
+\centering
+\includegraphics[width=1.00\textwidth]{resources/images/charts/vienna_eval_grib_final/Vienna, Difference to Measurements.png}
+\caption{Difference between reconstructed and measured hourly temperature for Vienna-Station}
+\end{figure}
+% RMSE reconstructed: 1.19, RMSE ERA5: 1.39, Correlation reconstructed: 0.991, Correlation ERA5: 0.989
+
+Similar to the Marshall-Station the plots for the Vienna-Station follow the same structure.
+Again, a plot over the full validation period on an hourly basis, daily and monthly aggregated ones and the diurnal cycle as well as an extract of a week, are shown.
+However, an important difference is that as the available data of the station in Vienna was so limited, we only included half a year in the validation data.
+Also, to put the validation of the reconstruction in perspective, it needs to be considered that the RMSE and correlation coefficient, in relation to the ERA5 data in Vienna, are by far the best among the three stations.
+1.19°C RMSE and 0.991 correlation coefficient for the reconstructed temperature compared to 1.39°C RMSE and 0.989 correlation coefficient for the ERA5 data at the nearest grid point.
+The model was able to reduce the error slightly but not significantly.
+This minor improvement can be attributed to the limited training data but also to the fact that the ERA5 data is already very similar to the station data.
+
+\begin{figure}
+\centering
+\includegraphics[width=1.00\textwidth]{resources/images/charts/vienna_eval_grib_final/Vienna - Daily mean.png}
+\caption{Reconstructed temperature for Vienna-Station (Daily mean)}
+\label{fig: vienna_daily}
+\end{figure}
+% RMSE reconstructed: 0.60, RMSE ERA5: 0.95, Correlation reconstructed: 0.997, Correlation ERA5: 0.995
+
+Aggregating the hourly values to daily means, as shown in \autoref{fig: vienna_daily}, unsurprisingly improves the RMSE and correlation coefficient again, and allows for an absolute temperature scale on the y-axis.
+It can be seen that as the temperature rises in Vienna from January to July until the station went offline.
+It seems that the reconstruction is just marginally improving from its input data in terms of correlation coefficient.
+However, the RMSE now at 0.60°C is by a relative measure significantly lower than the 0.95°C of the ERA5 data at the nearest grid point. 
+
+\begin{figure}
+\centering
+\includegraphics[width=1.00\textwidth]{resources/images/charts/vienna_eval_grib_final/Vienna, Average Diurnal Cycle.png}
+\caption{Measured temperature for Vienna-Station (Average Diurnal Cycle)}
+\label{fig: vienna_diurnal}
+\end{figure}
+% RMSE reconstructed 0.33, RMSE ERA5 0.73, Correlation reconstructed 0.985, Correlation ERA5 0.968
+
+Figure \ref{fig: vienna_diurnal} of the diurnal cycle shows the best performance of the model in Vienna, with an RMSE of 0.33°C compared to 0.73°C for the ERA5 data.
+The correlation coefficient of 0.968°C for the ERA5 data is the lowest among the different analyses for Vienna, which is due to the fact that there seems to be a time shift.
+As the temperature rises at the beginning of the day, the station temperature seems to be approximately one hour ahead of the ERA5 temperature.
+The model was able to correct this time shift, leading to this excellent RMSE and correlation coefficient of 0.985.
+
+\begin{figure}
+\centering
+\includegraphics[width=1.00\textwidth]{resources/images/charts/vienna_eval_grib_final/Vienna, 7 Day Period_1_2_3.png}
+\caption{Reconstructed temperature vs. measured hourly temperature for Vienna-Station (7 Day Period)}
+\label{fig: vienna_7day}
 \end{figure}
 
 \begin{figure}
-    \centering
-    \includegraphics[width=1.02\textwidth]{resources/images/charts/vienna_eval_grib_final/Vienna - Daily mean.png}
-    \caption{Reconstructed temperature for Vienna-Station (Daily mean)}
+\centering
+\includegraphics[width=1.00\textwidth]{resources/images/charts/vienna_eval_grib_final/Vienna - Monthly mean.png}
+\caption{Reconstructed temperature vs. measured temperature for Vienna-Station (Monthly mean)}
+\label{fig: vienna_monthly}
 \end{figure}
+% RMSE reconstructed 0.22, RMSE ERA5 0.56, Correlation reconstructed 1.000, Correlation ERA5 1.000
 
-\begin{figure}
-    \centering
-    \includegraphics[width=1.02\textwidth]{resources/images/charts/vienna_eval_grib_final/Vienna, Average Diurnal Cycle.png}
-    \caption{Measured temperature for Vienna-Station (Average Diurnal Cycle)}
-\end{figure}
-
-\begin{figure}
-    \centering
-    \includegraphics[width=1.02\textwidth]{resources/images/charts/vienna_eval_grib_final/Vienna, 7 Day Period_1_2_3.png}
-    \caption{Reconstructed temperature vs measured hourly temperature for Vienna-Station (7 Day Period)}
-\end{figure}
-
-\begin{figure}
-    \centering
-    \includegraphics[width=1.02\textwidth]{resources/images/charts/vienna_eval_grib_final/Vienna - Monthly mean.png}
-    \caption{Reconstructed temperature vs measured temperature for Vienna-Station (Monthly mean)}
-\end{figure}
-
-\newpage
+When aggregating to a monthly mean, it becomes further visible how close the ERA5 and reconstructed temperature are to the measurements. The correlation coefficients are both 1.000, indicating a perfect correlation.
+The only issue visible is that ERA5 has a slightly low bias, which the model minimally overcorrects.
 
 \subsubsection*{Barbados-Station}
 
-\begin{figure}[H]
+\begin{figure}
     \centering
-    \includegraphics[width=1.02\textwidth]{resources/images/charts/barbados_eval_grib_final/Barbados, Difference to Measurements.png}
+    \includegraphics[width=1.00\textwidth]{resources/images/charts/barbados_eval_grib_final/Barbados, Difference to Measurements.png}
     \caption{Difference between reconstructed and measured hourly temperature for Barbados-Station}
 \end{figure}
+% RMSE reconstructed: 1.43, RMSE ERA5: 2.14, Correlation reconstructed: 0.666, Correlation ERA5: 0.478
+% super low correlation for era5, improved but compared to other stations still low
+% big gap  visible again of 1month+ in the beginning because missing data
 
 \begin{figure}
     \centering
-    \includegraphics[width=1.02\textwidth]{resources/images/charts/barbados_eval_grib_final/Barbados - Daily mean.png}
+    \includegraphics[width=1.00\textwidth]{resources/images/charts/barbados_eval_grib_final/Barbados - Daily mean.png}
     \caption{Reconstructed temperature for Barbados-Station (Daily mean)}
 \end{figure}
+% RMSE reconstructed: 0.65, RMSE ERA5: 1.54, Correlation reconstructed: 0.786, Correlation ERA5: 0.788
+% on daily basis correlation fairly high again, as the biggest difference in Barbados comes through the diurnal cycle
 
 \begin{figure}
     \centering
-    \includegraphics[width=1.02\textwidth]{resources/images/charts/barbados_eval_grib_final/Barbados, Average Diurnal Cycle.png}
+    \includegraphics[width=1.00\textwidth]{resources/images/charts/barbados_eval_grib_final/Barbados, Average Diurnal Cycle.png}
     \caption{Measured temperature for Barbados-Station (Average Diurnal Cycle)}
 \end{figure}
+% RMSE reconstructed 0.55, RMSE ERA5 2.03, Correlation reconstructed 0.964, Correlation ERA5 0.482
+% super good effort here in the reconstruction, the diurnal cycle in era5 which was the input data is basically flat, hence has a low correlation, but the model was able to reconstruct the diurnal cycle of the station to a point where the correlation is really high again, however the amplitude of the diurnal cycle is not as high as in the measurements, corr coeff still high as it's just linear-relationship thingy
+
 
 \begin{figure}
     \centering
-    \includegraphics[width=1.02\textwidth]{resources/images/charts/barbados_eval_grib_final/Barbados, 7 Day Period_1_2_3.png}
+    \includegraphics[width=1.00\textwidth]{resources/images/charts/barbados_eval_grib_final/Barbados, 7 Day Period_1_2.png}
     \caption{Reconstructed temperature vs measured hourly temperature for Barbados-Station (7 Day Period)}
 \end{figure}
 
 \begin{figure}
     \centering
-    \includegraphics[width=1.02\textwidth]{resources/images/charts/barbados_eval_grib_final/Barbados - Monthly mean.png}
+    \includegraphics[width=1.00\textwidth]{resources/images/charts/barbados_eval_grib_final/Barbados - Monthly mean.png}
     \caption{Reconstructed temperature vs measured temperature for Barbados-Station (Monthly mean)}
 \end{figure}
+% RMSE reconstructed 0.12, RMSE ERA5 1.44, Correlation reconstructed 0.985, Correlation ERA5 0.968
+% rmse seems low but it needs to be considered that the diurnal cycle is not as pronounced in the measurements as in the other stations, hence the rmse is lower, compared to corr coeff on monthly basis of matshall and vienna, barbados is difficult...
 
 \newpage

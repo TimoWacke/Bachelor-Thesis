@@ -11,7 +11,7 @@ Application of CNNs in climate science has yielded several notable contributions
 In the context of this work, an architecture introduced by (\cite{ronneberger2015}) is used, which consists of an encoder and a decoder part as seen in \autoref{fig: u_net}. Due to its shape, it is called U-Net. The encoder part consists of convolutional layers and pooling layers, while the decoder part consists of upscaling layers and in this case, skip connections as proposed by \cite{liu2018inpaining}.
 
 \subsubsection*{Convolutional Layer}
-\begin{figure}
+\begin{figure}[H]
     \centering
     \animategraphics[loop,autoplay,width=400pt]{1}{resources/images/convolution_gif/convolution_kernel-}{0}{15}
     \caption{How a convolution operation works. Source: Datahacker.rs. Edge detection. https://datahacker.rs/edge-detection/, 2021.
@@ -35,14 +35,7 @@ In the context of weather data, the convolutional layer can be used to detect an
 
 To map the output of the convolutional layer to a meaningful space, and to avoid negative values, an activation function is applied. This introduces non-linearity into the network. The simplest activation function is the ReLU function, which returns the input if it is positive and zero otherwise. It is defined as $f(x) = max(0, x)$. The ReLu function is the activation function used in this work after each convolutional operation.
 
-\subsubsection*{Pooling Layer}
-
-The exact position of a low-level feature in the input data is not so important when it comes to detecting high-level features,
-it is more important to recognize if a feature is present at all in area of the input data or not.
-Thus scaling down the resolution of the matrix by combining every 2x2 submatrix into one value can be beneficial.
-A possible way to aggregate them is by taking the maximum value of the submatrix, which will work for the mentioned purpose of detecting if a feature is present in the area of the submatrix or not. In \autoref{fig: convolution_operation} the convolution operation itself also reduces the shape of the input data, which is because close to the borders of the input data the kernel can not be applied entirely, but in this work it is avoided by padding the input data.
-
-\begin{figure}
+\begin{figure}[H]
     \begin{subfigure}{1\textwidth}
         \centering
         \includegraphics[width=0.9\textwidth]{resources/images/abstraction.png}
@@ -65,16 +58,20 @@ A possible way to aggregate them is by taking the maximum value of the submatrix
     \end{subfigure}
 \end{figure}
 
-For the 8x8 grid cells of the ERA5 data, that is used as input in the laid out approach (see \autoref{subsec:data_preprocessing}), the architecture of the CNN could include a maximum of 3 pooling layers, reducing the input data to a 1x1 matrix as seen in \autoref{fig: max_pooling}. \autoref{fig: max_pooling} just illustrates the downsampling of the data, in the actual architecture, pooling layers always come together with convolutional layers and are never applied directly after each other as seen in the encoder part of \autoref{fig: encoder_architecture}.
+\subsubsection*{Pooling Layer}
+
+The exact position of a low-level feature in the input data is not so important when it comes to detecting high-level features,
+it is more important to recognize if a feature is present at all in area of the input data or not.
+Thus scaling down the resolution of the matrix by combining every 2x2 submatrix into one value can be beneficial.
+A possible way to aggregate them is by taking the maximum value of the submatrix, which will work for the mentioned purpose of detecting if a feature is present in the area of the submatrix or not. In \autoref{fig: convolution_operation} the convolution operation itself also reduces the shape of the input data, which is because close to the borders of the input data the kernel can not be applied entirely, but in this work it is avoided by padding the input data. For the 8x8 grid cells of the ERA5 data, that is used as input in the laid out approach (see \autoref{subsec:data_preprocessing}), the architecture of the CNN could include a maximum of 3 pooling layers, reducing the input data to a 1x1 matrix as seen in \autoref{fig: max_pooling}. \autoref{fig: max_pooling} just illustrates the downsampling of the data, in the actual architecture, pooling layers always come together with convolutional layers and are never applied directly after each other as seen in the encoder part of \autoref{fig: encoder_architecture}.
 In this work, the pooling is integrated into the convolution operation by using a step size of 2 when sliding the kernel over the input data, reducing the shape of the data by half in each dimension.
 
 \subsubsection*{Decoder}
 
 In the decoding phase of the U-Net architecture, the original data shape is reinstated by upscaling the encoded layers using detected features. Nearest-neighbor interpolation is employed for this purpose, wherein values in the matrix are replicated as required.
 As the decoder progressively restores the shape, it incorporates so-called skip connections with the encoder at each level. Skip connections entail copying the outputs of each encoding layer directly into the decoding process.
-This mechanism aids the network in retaining the contextual information of the input data, which proves particularly crucial in spatial infilling tasks, where the reconstruction must align with the available surrounding data in the absence of certain information \cite{liu2018inpaining}.
-To integrate the doubled data from skip connections with the upscaling layers, a convolution operation is applied once more (see Figure \ref{fig
-}), with the step size configured to halve the size.
+This mechanism aids the network in retaining the contextual information of the input data, which proves particularly crucial in spatial infilling tasks, where the reconstruction must align with the available surrounding data \cite{liu2018inpaining}.
+To integrate the doubled data from skip connections with the upscaling layers, a convolution operation is applied once more (see Figure \ref{fig: u_net}), with the step size configured to halve the size.
 This combined architectural approach ensures that for any input data, the model generates a prediction of the same shape as the input, with the predicted values representing the missing data.
 The specific values are determined by the parameters employed in the convolution kernels.
 
@@ -89,8 +86,6 @@ However, as the prediction is a matrix and the target is a scalar, the absolute 
 Then the partial gradient of the loss function concerning each weight in the network is calculated.
 This involves recursively applying the chain rule of calculus, a process known as backpropagation. The weights are then adjusted in the opposite direction of the gradient to minimize the loss function.
 The magnitude of these adjustments is governed by the learning rate, a pivotal hyperparameter in the training process. 
-
-\newpage
 
 \subsection{Atmospheric Reanalysis}
  

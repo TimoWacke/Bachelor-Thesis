@@ -1,5 +1,5 @@
 \section{Theoretical Background}
-\label{sec:theory}
+\label{sec: theory}
 
 \subsection{Convolutional Neural Networks}
 \label{subsec:cnn}
@@ -11,17 +11,17 @@ CNNs are a type of deep learning architecture inspired by the visual cortex of a
 
 Application of CNNs in climate science has yielded several notable contributions, including the reconstruction of the El Nino event of 1877 by Kadow et al. despite extremely limited data availability. \cite{kadow2020}
 
-In the context of this work, an architecture introduced by (\cite{ronneberger2015}) is used, which consists of an encoder and a decoder part as seen in \autoref{fig:u_net}. Due to its shape, it is called U-Net. The encoder part consists of convolutional layers and pooling layers, while the decoder part consists of upscaling layers and in this case, skip connections as proposed by \cite{liu2018inpaining}.
+In the context of this work, an architecture introduced by (\cite{ronneberger2015}) is used, which consists of an encoder and a decoder part as seen in \autoref{fig: u_net}. Due to its shape, it is called U-Net. The encoder part consists of convolutional layers and pooling layers, while the decoder part consists of upscaling layers and in this case, skip connections as proposed by \cite{liu2018inpaining}.
 
 \subsubsection*{Convolutional Layer}
 \begin{figure}
     \centering
     \animategraphics[loop,autoplay,width=400pt]{1}{resources/images/convolution_gif/convolution_kernel-}{0}{15}
     \caption{How a convolution operation works. \cite{datahacker}}
-    \label{fig:convolution_operation}
+    \label{fig: convolution_operation}
 \end{figure}
 
-The convolutional layer is the driver for feature mapping in a CNN. It applies a convolution operation shown in \autoref{fig:convolution_operation} to the input data. The operation is done element by element while sliding a filter (also called kernel) over the input data such that situations, where the filter overflows the input data ranges, are avoided or taken care of. On each step, the Frobenius Product between the kernel and the submatrix given by the current position and the kernel dimension is calculated and noted in the output matrix. The parameters in the kernel matrix are chosen in such a way that the Frobenius Product is maximized when the kernel is over a feature that the kernel is supposed to detect. In \autoref{fig:convolution_operation} the kernel for example is a vertical edge detector, meaning it will output a high amount (positive or negative) when the horizontal gradient in the input data submatrix has a high absolute value. This result is rather trivial, as a positive horizontal gradient as seen in the upper-left 3x3 submatrix of the example leads to a right column that when negatively weighted overweights the positive-weighted left column and thus the output for the upper-left 3x3 submatrix is negative. Conversely, a Fresenius product of the upper-right 3x3 submatrix with the kernel returns a positive value, hinting at a negative horizontal gradient in the input data. The result of such a convolution can be observed in \autoref{fig:edge_detection}.
+The convolutional layer is the driver for feature mapping in a CNN. It applies a convolution operation shown in \autoref{fig: convolution_operation} to the input data. The operation is done element by element while sliding a filter (also called kernel) over the input data such that situations, where the filter overflows the input data ranges, are avoided or taken care of. On each step, the Frobenius Product between the kernel and the submatrix given by the current position and the kernel dimension is calculated and noted in the output matrix. The parameters in the kernel matrix are chosen in such a way that the Frobenius Product is maximized when the kernel is over a feature that the kernel is supposed to detect. In \autoref{fig: convolution_operation} the kernel for example is a vertical edge detector, meaning it will output a high amount (positive or negative) when the horizontal gradient in the input data submatrix has a high absolute value. This result is rather trivial, as a positive horizontal gradient as seen in the upper-left 3x3 submatrix of the example leads to a right column that when negatively weighted overweights the positive-weighted left column and thus the output for the upper-left 3x3 submatrix is negative. Conversely, a Fresenius product of the upper-right 3x3 submatrix with the kernel returns a positive value, hinting at a negative horizontal gradient in the input data. The result of such a convolution can be observed in \autoref{fig: edge_detection}.
 
 In the context of weather data, the convolutional layer can be used to detect any weather patterns not just edges and the kernel itself can be learned by the network.
 
@@ -29,7 +29,7 @@ In the context of weather data, the convolutional layer can be used to detect an
     \centering
     \includegraphics[width=250px]{resources/images/edge_detection.jpeg}
     \caption{Example of edge detection with a convolutional kernel. \cite{datahacker}}
-    \label{fig:edge_detection}
+    \label{fig: edge_detection}
 \end{figure}
 
 \subsubsection*{Activation Function}
@@ -48,25 +48,25 @@ It is most commonly aggregated by taking the maximum value of the submatrix beca
         \centering
         \includegraphics[width=0.9\textwidth]{resources/images/abstraction.png}
         \caption{Low-level features are combined into high-level features.}
-        \label{fig:abstraction}
+        \label{fig: abstraction}
     \end{subfigure}
     \begin{subfigure}{\textwidth}
         \centering
         \vspace{0.5cm}
         \includegraphics[width=0.7\textwidth]{resources/images/max_pooling.png}
         \caption{Illustration of 3 max pooling operations}
-        \label{fig:max_pooling}
+        \label{fig: max_pooling}
     \end{subfigure}
     \begin{subfigure}{\textwidth}
         \centering
         \vspace{0.5cm}
         \includegraphics[width=0.9\textwidth]{resources/images/u_net.png}
         \caption{Encoder Decoder Architecture in the U-Net.}
-        \label{fig:u_net}
+        \label{fig: u_net}
     \end{subfigure}
 \end{figure}
 
-For the 8x8 grid cells of the ERA5 data, that is used as input in the laid out approach (see \autoref{subsec:data_preprocessing}), the architecture of the CNN could include a maximum of 3 pooling layers, reducing the input data to a 1x1 matrix as seen in \autoref{fig:max_pooling}. \autoref{fig:max_pooling} just illustrates the downsampling of the data, in the actual architecture pooling layers always follow convolutional layers and are never applied directly after each other as seen in \autoref{fig:encoder_architecture}. 
+For the 8x8 grid cells of the ERA5 data, that is used as input in the laid out approach (see \autoref{subsec:data_preprocessing}), the architecture of the CNN could include a maximum of 3 pooling layers, reducing the input data to a 1x1 matrix as seen in \autoref{fig: max_pooling}. \autoref{fig: max_pooling} just illustrates the downsampling of the data, in the actual architecture pooling layers always follow convolutional layers and are never applied directly after each other as seen in \autoref{fig: encoder_architecture}. 
 
 
 \subsubsection*{Upscaling Layer}
@@ -90,7 +90,7 @@ The now-explained steps used in the architecture combined will return for any in
 
 ?? Question: What else weights are there? The architecture does not have fully connected layers, does it? So no weights there. What about the pooling and upscaling layers? Are there weights in the activation function?
 
-With the correct weights found the prediction should be ideally the same as the target data. This is what the training process is for which is supervised based on the available measurements, the ground truth (see \autoref{fig:supervised_learning}). 
+With the correct weights found the prediction should be ideally the same as the target data. This is what the training process is for which is supervised based on the available measurements, the ground truth (see \autoref{fig: supervised_learning}). 
 
 \subsubsection*{Backpropagation and Loss Function}
 

@@ -1,5 +1,5 @@
 \section{Conceptual Framework}
-\label{sec:design}
+\label{sec: design}
 
 \subsection{Concept}
 
@@ -8,17 +8,17 @@
     \includegraphics[width=\textwidth]{resources/images/ERA5_tas_around_barbados.png}
     \caption{8x8 grid-points of ERA5 with 2m temperature 
     for 2020-06-23 19:00 UTC  in the area of a weather station on Barbados}    
-    \label{fig:barbados}
+    \label{fig: barbados}
 \end{figure}
 
 \begin{figure}
     \centering
     \includegraphics[width=0.9\textwidth]{resources/images/supervised_learning.png}
     \caption{Conceptual framework using supervised learning.}
-    \label{fig:supervised_learning}
+    \label{fig: supervised_learning}
 \end{figure}
 
-The conceptual framework of the proposed method is illustrated in \autoref{fig:concept}.
+The conceptual framework of the proposed method is illustrated in \autoref{fig: concept}.
 Applying the local patterns at the weather station location on top of ERA5 would reconstruct the temperature data at the station.
 The idea is that a Convolutional Neural Network would learn to recognize the relevant patterns in a regional cutout of ERA5 data in the station area.
 Based on the regional ERA5 data, the network would then predict the temperature at the weather station.
@@ -33,7 +33,7 @@ It also allows for flexibility in application, as the model can be applied to an
 The disadvantage is that the model can not learn from the sequence of timesteps, meaning it can not learn from the temporal evolution of the weather patterns, but that is not anticipated to be a problem since all that information is already included in the ERA5 data.
 Therefore, when reconstructing missing data, the model is applied to the ERA5 data hour by hour, and the result is a series of hourly predictions that are not connected in time.
 
-% In \autoref{fig:barbados} ERA5 grid points around a weather station on Barbados are shown along with their corresponding temperature two meters above the surface. The graph is for the hour 19:00 UTC on the 23rd of June 2020. Along the latitude and longitude lines 8 grid points are selected in each dimension, such that the weather station is centered, meaning it lays between the 4th and 5th grid point in each dimension. The available longitudes and latitudes in the ERA5 model are spaced by 0.25° along the latitude and longitude from each other, which means an almost fixed distance along the latitude while the width along the longitude varies depending on how close to the poles/equator the grid points are, obviously going close to zero neat the poles. In the case of Barbados at a latitude of 13 deg the distance between 2 gridpoints along the longitude is still about 27 km.
+% In \autoref{fig: barbados} ERA5 grid points around a weather station on Barbados are shown along with their corresponding temperature two meters above the surface. The graph is for the hour 19:00 UTC on the 23rd of June 2020. Along the latitude and longitude lines 8 grid points are selected in each dimension, such that the weather station is centered, meaning it lays between the 4th and 5th grid point in each dimension. The available longitudes and latitudes in the ERA5 model are spaced by 0.25° along the latitude and longitude from each other, which means an almost fixed distance along the latitude while the width along the longitude varies depending on how close to the poles/equator the grid points are, obviously going close to zero neat the poles. In the case of Barbados at a latitude of 13 deg the distance between 2 gridpoints along the longitude is still about 27 km.
 
 \subsection{Data Acquisition and Preprocessing}
 \label{subsec:data_preprocessing}

@@ -39,7 +39,7 @@ To map the output of the convolutional layer to a meaningful space, and to avoid
 \subsubsection*{Pooling Layer}
 
 The exact position of a low-level feature in the input data is not so important when it comes to detecting high-level features,
-it is more important to recognize if a feature is present at all in certain spatial areas of the input data or not.
+it is more important to recognize if a feature is present at all in area of the input data or not.
 Thus scaling down the resolution of the matrix by combining every 2x2 submatrix into one value can be beneficial.
 It is most commonly aggregated by taking the maximum value of the submatrix because it works for the mentioned purpose to detect if a feature is present in the area of the submatrix or not. While the convolution layer depending on how the convolution is processed near the borders of the input data reduces the dimensionality of the input data just slightly or not at all, the pooling reduces the dimensionality drastically. So after a 2x2 pooling operation, the output matrix is only a quarter of the size of the input matrix.
 
@@ -50,32 +50,24 @@ It is most commonly aggregated by taking the maximum value of the submatrix beca
         \caption{Low-level features are combined into high-level features.}
         \label{fig:abstraction}
     \end{subfigure}
-    \vspace{0.5cm}
-    \begin{subfigure}{0.65\textwidth}
+    \begin{subfigure}{\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{resources/images/max_pooling.png}
+        \vspace{0.5cm}
+        \includegraphics[width=0.7\textwidth]{resources/images/max_pooling.png}
         \caption{Illustration of 3 max pooling operations}
         \label{fig:max_pooling}
     \end{subfigure}
-    \begin{subfigure}{0.30\textwidth}
+    \begin{subfigure}{\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{resources/images/encoder_architecture.png}
-        \caption{Alternation of convolutional and pooling}
-        \label{fig:encoder_architecture}
+        \vspace{0.5cm}
+        \includegraphics[width=0.9\textwidth]{resources/images/u_net.png}
+        \caption{Encoder Decoder Architecture in the U-Net.}
+        \label{fig:u_net}
     \end{subfigure}
-    \caption{Abstraction in the encoding part of a CNN.}
 \end{figure}
-
 
 For the 8x8 grid cells of the ERA5 data, that is used as input in the laid out approach (see \autoref{subsec:data_preprocessing}), the architecture of the CNN could include a maximum of 3 pooling layers, reducing the input data to a 1x1 matrix as seen in \autoref{fig:max_pooling}. \autoref{fig:max_pooling} just illustrates the downsampling of the data, in the actual architecture pooling layers always follow convolutional layers and are never applied directly after each other as seen in \autoref{fig:encoder_architecture}. 
 
-
-\begin{figure}
-    \centering
-    \includegraphics[width=0.9\textwidth]{resources/images/u_net.png}
-    \caption{Encoder Decoder Architecture in the U-Net.}
-    \label{fig:u_net}
-\end{figure}
 
 \subsubsection*{Upscaling Layer}
 
@@ -105,14 +97,6 @@ With the correct weights found the prediction should be ideally the same as the 
 ??? I am using Loss Function 3, what should I explain here in the context of a bachelor thesis about it?
 
 To minimize any differences between ground through and prediction, the differences first need to be quantified in a loss function. Then the partial gradient of the loss function concerning each weight in the network is calculated. This is done through backpropagation, recursively applying the chain rule of calculus. The weights are then updated in the opposite direction of the gradient, such that the loss function is minimized. The learning rate determines how big the adjustments are made and is a crucial hyperparameter in the training process. 
-
-
-\begin{figure}
-    \centering
-    \includegraphics[width=0.9\textwidth]{resources/images/supervised_learning.png}
-    \caption{Schema of supervised learning.}
-    \label{fig:supervised_learning}
-\end{figure}
 
 \newpage
 

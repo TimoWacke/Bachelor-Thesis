@@ -4,7 +4,7 @@
 
 \subsection{Included Weather Stations}
 
-From the 3D-Paws project of NCAR, measurements from three different weather stations in recent years were obtained. The stations are located in Marshall, Colorado; Vienna, Austria; and Barbados, Caribbean. The measurements span up to late 2023, with the quantity of available temperature data varying significantly between stations. The station in Marshall is one of the oldest in the 3D-Paws project and has the most available measurements among the three stations. The weather station in Vienna also has data dating back to 2017, but it has been almost completely offline since mid-2019. The weather station in Barbados began recording in mid-2020
+From the 3D-Paws project (see \autoref{sec:3d_printed_stations}), measurements from three different weather stations in recent years were obtained. The stations are located in Marshall, Colorado; Vienna, Austria; and Barbados, Caribbean.
 
 % 3 images side by side with available weather stations
 \begin{figure}
@@ -28,9 +28,9 @@ From the 3D-Paws project of NCAR, measurements from three different weather stat
     \label{fig:weather_stations}
 \end{figure}
 
-\begin{wrapfigure}[15]{r}{0.36\textwidth}
+\begin{wrapfigure}[15]{r}{0.40\textwidth}
     \centering
-    \includegraphics[width=0.35\textwidth]{resources/images/Marshall_era5.png}
+    \includegraphics[width=0.38\textwidth]{resources/images/Marshall_era5.png}
     \caption{ERA5 Area of the station in Marshall, Colorado}
     \label{fig:era5_marshall}
 \end{wrapfigure}
@@ -43,13 +43,15 @@ Vienna is situated to the west within the Vienna Basin, at a relatively low alti
 The station in Barbados is located in the parish of St George at an altitude of 274m, the island itself is relatively flat with the highest point being Mount Hillaby at 340m. The island is 34km long and up to 23km wide, which is approximately the size of an ERA5 grid cell, but as can be observed in \autoref{fig:barbados} all surrounding grid cells are ocean heavy, while the stations location on Barbados is close the the point where the landmass is the widest. The ERA5 data is therefore not able to capture the diurnal cycle of the station as it is located on land, while the surrounding grid cells are mostly ocean.
 
 \subsection{Data availability}
+The measurements span up to late 2023, with the quantity of available temperature data varying significantly between stations. The station in Marshall is one of the oldest in the 3D-Paws project and has the most available measurements among the three stations. The weather station in Vienna also has data dating back to 2017, but it has been almost entirely offline since mid-2019.
+The weather station in Barbados began recording in mid-2020.
 In \autoref{fig:weather_stations} the measurements of the three stations are displayed, after data cleansing and converting them on an hourly basis. The measurements were provided by the NCAR with most invalid values already marked as such but especially in Barbados the sensors had more noise and occasional invalid measurements such that they needed extra cleansing. To do so, values at temperatures near zero and below were excluded. The conversion from minute to hourly data was done by taking the average of all minute values in that specific hour, but only if there were more than 20 values available and only if the values weren't all the same. It has been observed that the sensors sometimes get stuck and then deliver the same value for a longer period. The dataset for the Marshall station spans from 2017 to 2023, comprising 41,883 data points. These measurements reveal three significant data gaps along with several smaller ones. The larger intervals without data include the midsummer period of 2018, late 2019 to early 2020, and the most extensive gap occurring over five months from September 2019 to January 2020
 
 For the Vienna Station, measurements are available for only 12,477 hours, which is less than a third compared to Marshall. This is primarily due to extended downtimes starting from mid-2018, resulting in few to no measurement data. Except for a brief period from late 2018 to July 2019, when continuous measurements resumed. After that, there were only sporadic data collection instances, before the station went preliminary offline in April 2022.
 
 The Barbados Station only suffered 2 downtimes that were significantly longer than a month with the biggest being roughly the first half of 2021 and the 2nd biggest being the first quarter of 2023. In total the station has 17,315 hours of measurements, which is still less than half of the Marshall station. 
 
-\subsection*{Splitting into Training and Validation Data}
+\subsubsection*{Splitting into Training and Validation Data}
 
 As explained in \autoref{sec: design}, the measurements are split into a training and validation dataset. The training dataset is used to train the model, while the validation dataset will be kept aside to compare it to what the model predicts after the training to validate if and to which extent the model learned to reconstruct the missing data. If the validation data would be included in the training data, the model would be able to predict the values it has already seen, but it would be impossible to tell if the model learned to generalize the local wather patterns.
 Starting with the Marshall station, the data was sufficient to extract an entire year as validation data. Excluding a consecutive year from the training data not only allows for a comprehensive analysis of a full yearly cycle but also ensures that the model relies solely on the general weather patterns it learned from the training data to predict the values of the validation data. This approach prevents the model from potentially "cheating" by accessing information from nearby training data points, which could compromise the integrity of the validation process. It is a common practice in the machine learning field to validate data as a contiguous set, as it helps to maintain the independence and integrity of the validation process. 2021 highlighted in blue in \ref{fig:available_measurements_marshall} was the most complete year in the Marshall dataset thus it was chosen as the validation data. With the mask of 2021 applied the training data for Marshall consists of 34,188 hours of measurements which is about 82\% of the total data.
@@ -65,17 +67,58 @@ The Barbados station also only had 2022 and 2023 as a complete available years, 
 
 % Vienna 12477, 9593 without 2019 -> gives a ratio for validation data of 0.23
 
+%Table with the data availability and the split into training and validation data
 
-\subsection{Validation of the Models}
+\begin{table}
+    \centering
+    \begin{tabular}{|c|c|c|c|c|}
+        \hline
+        Station & Total Data & Training Data & Validation Data & Validation Ratio \\
+        \hline
+        Marshall & 41,883 & 34,188 & 7,695 & 0.18 \\
+        Barbados & 17,315 & 14,576 & 2,739 & 0.16 \\
+        Vienna & 12,477 & 9,593 & 2,884 & 0.23 \\
+        \hline
+    \end{tabular}
+    \caption{Data availability and split into training and validation data}
+    \label{tab:data_split}
+\end{table}
 
-For the training and validation data, the corresponding temperature data of the 64 ERA5 grid cells in the regions of each station was obtained. The 8x8 grid cells were chosen to be centered as good as possible around each weather station, given the specific ERA5 coordinates. The ERA5 data also was preprocessed using the code pipeline described in \autoref{sec:implementation} and then the CNN with the architecture described in \autoref{subsec:cnn} was trained on the training data. The training was done in batches of 4 datapoints, which are in hour case the hourly steps, at a time. The model was trained for up to 300,000 iterations, which therefore are depending on the dataset size between 8 and 31 epochs. The training was done on the Supercomputer "Levante" of the German Climate Computing Center, which made it possible to complete training runs in just a few hours. However, the training can be done in the same way on almost any machine. During the training, in the scientific process, where the approach is un-proven to work, it is especially important to validate multiple times during the training to calculate not only the loss function over the model for the training data, but over the validation data. This is done to prevent overfitting, a so called phenomena where the model in the aim to minimize the loss for the training data, which is what training using backpropagation is exactly at it's core, starts to learn the noise and any potential specifics of the training data so well, that it loses it's ability to generalize and the loss for the validation data starts to increase. This is a sign that the model is overfitting and the training should be stopped. The model that is then saved is the one that performed best on the validation data. To allow for that, not only was the ERA5 data for the training data provided to the machine learning architecture but also the validation ERA5 data paired with the expected output for these, the masked measurements of the weather station.
+\subsubsection*{Execution of Train}
 
-Training runs have been completed for all stations with up to 1 million iterations, but the best models were in most cases already found between 300 and 500 thousand iterations. The models were then applied to the ERA5 data at all the hours in the validation data set of each station, to analyze the performance of the model for each station. 
-% As numerical measures of quality, the Root Mean Squared Error (RMSE) and the correlation coefficient were calculated. The RMSE is a measure of the differences between predicted and observed values, while the correlation coefficient quantifies the strength and direction of the linear relationship between the two datasets. 
+For the training and validation data, the corresponding temperature data of the 64 ERA5 grid cells in the regions of each station was obtained.
+The 8x8 grid cells were chosen to be centered as well as possible around each weather station, given the specific ERA5 coordinates.
+The ERA5 data was also preprocessed using the code pipeline described in \autoref{sec:implementation}.
+Then, the CNN with the architecture described in \autoref{subsec:cnn} was trained on the training data. The training was done in batches of 4 data points, which are, in hour case, the hourly steps at a time. The model was trained for up to 300,000 iterations, which, therefore, depend on the dataset size between 8 and 31 epochs. The training was done on the Supercomputer "Levante" of the German Climate Computing Center, which made it possible to complete training runs in just a few hours. However, the training can be done in the same way on almost any machine. During the training, in the scientific process, where the approach is un-proven to work, it is especially important to validate multiple times during the training to calculate not only the loss function over the model for the training data, but over the validation data. This is done to prevent overfitting, a so-called phenomenon where the model in the aim to minimize the loss for the training data, which is what training using backpropagation is exactly at it is core, starts to learn the noise and any potential specifics of the training data so well, that it loses it is ability to generalize and the loss for the validation data starts to increase. This is a sign that the model is overfitting and the training should be stopped. The model that is then chosen is the one that performed best on the validation data. To allow for that, not only was the ERA5 data for the training data provided to the machine learning architecture but the validation ERA5 data was also paired with the expected output for these, the masked measurements of the weather station.
+
+Training runs have been completed for all stations with up to 1 million iterations, but the best models were in most cases, already found between 300 and 500 thousand iterations. The models were then applied to the ERA5 data at all the hours in the validation data set of each station, to analyze the performance of the model for each station. 
+
+\subsection{Validation Methods}
+
+\begin{figure}
+    \centering
+    \begin{subfigure}{0.35\textwidth}
+        \centering
+        \includegraphics[width=0.7\textwidth]{resources/images/low_rmse.png}
+        \caption{Low RMSE, low Correlation Coefficient}
+        \label{fig:low_rmse}
+    \end{subfigure}
+    \hspace{0.5cm}
+    \begin{subfigure}{0.35\textwidth}
+        \centering
+        \includegraphics[width=0.7\textwidth]{resources/images/high_corr.png}
+        \caption{High Correlation Coefficient, high RMSE}
+        \label{fig:high_corr}
+    \end{subfigure}
+    \caption{Comparison of the RMSE and Correlation Coefficient}
+\end{figure}
+
+As numerical measures of quality, the Root Mean Squared Error (RMSE) and the correlation coefficient were calculated. The RMSE is a measure of the differences between predicted and observed values, while the correlation coefficient quantifies the strength and direction of the linear relationship between the two datasets. 
+
 
 \subsubsection*{Root Mean Squared Error (RMSE)}
 
-To quantify how far apart the reconstructed temperature series $\hat{y}$ is from the measured temperature series $y$, where both series have $n$ different timesteps and thus can be seen as vectors most commonly the root mean squared error (RMSE) comes to help, which is strongly connected to the Euclidean norm of the difference between both vectors $\hat{y} - y$. However, a simple mean absolute error (MAE), also called the Manhattan norm could seem most intuitive and easiest to understand. It would be calculated just by adding all absolute differences up before dividing it by the length of the series. The RMSE is favored in machine learning and statistics because it penalizes larger differences more than smaller ones, which is more in line with the human perception of errors. 
+To quantify how far apart the reconstructed temperature series $\hat{y}$ is from the measured temperature series $y$, where both series have $n$ different timesteps and thus can be seen as vectors, most commonly the root mean squared error (RMSE) comes to help, which is strongly connected to the Euclidean norm of the difference between both vectors $\hat{y} - y$. However, a simple mean absolute error (MAE), also called the Manhattan norm, could seem most intuitive and easiest to understand. It would be calculated just by adding all absolute differences up before dividing it by the length of the series. The RMSE is favored in machine learning and statistics because it penalizes larger differences more than smaller ones, which is more in line with the human perception of errors. 
 
 \begin{equation}
     \text{RMSE} = \sqrt{\frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2}
@@ -94,7 +137,7 @@ When converting \autoref*{eq:rmse}, it can be seen how the RMSE is connected to 
   \label{eq:rmse_euclid}
 \end{equation}
 
-The Euclidean norm $\| y - \hat{y} \|_2$, of a coordinate in our case the error $\hat{y} - y$ can be imagined as the diagonal distance between the origin and the point with these coordinates. For demonstration purposes, a right triangle in 2-dimensional space can be imagined with the errors at 2 validation timesteps as the legs. The Euclidian norm over both errors would be proportional to the hypothenuse of that triangle which is more dependent on the length of the longer leg than the shorter one. The Manhattan norm (\autoref{eq:mae}), on the other hand, which received its name from the gridded street system of Manhattan is not based on the diagonal distance, but proportional to the distance a taxicab in Manhattan would have to drive to travel along the hypothenuse, the equally weighted sum of the legs.
+The Euclidean norm $\| y - \hat{y} \|_2$, of a coordinate in our case the error $\hat{y} - y$ can be imagined as the diagonal distance between the origin and the point with these coordinates. For demonstration purposes, a right triangle in 2-dimensional space can be imagined with the errors at 2 validation timesteps as the legs. The RMSE over both errors would be proportional to the hypothenuse of that triangle which is more dependent on the length of the longer leg than the shorter one. The Manhattan norm (\autoref{eq:mae}), on the other hand, which received its name from the gridded street system of Manhattan is not based on the diagonal distance, but the distance a taxicab in Manhattan would have to drive to travel along the hypothenuse, the equally weighted sum of the legs.
 
 \subsubsection*{Pearson Correlation Coefficient}
 
@@ -107,21 +150,22 @@ The Pearson correlation coefficient (in the following called correlation coeffic
     
 Where $\bar{y}$ and $\bar{\hat{y}}$ are the mean values of the measured and the model output temperature series, respectively. The correlation coefficient is a measure of how well the model output follows the general trend of the measured data. \cite{Zou2003Correlation}
 
+\subsection{Validation of the Models}
 
-\subsection*{Marshall-Station}
+\subsubsection*{Marshall-Station}
 
 \begin{figure}
     \centering
-    \includegraphics[width=\textwidth]{resources/images/charts/marshall_eval_grib_final/Marshall, Difference to Measurements.png}
+    \includegraphics[width=1.07\textwidth]{resources/images/charts/marshall_eval_grib_final/Marshall, Difference to Measurements.png}
     \caption{Difference between reconstructed and measured temperature for Marshall-Station}
     \label{fig:marshall_diff}
 \end{figure}
 
-To begin with Marshall the occasion with the most available training data, all by the model predicted temperatures for the hourly measurements of the validation dataset have been plotted in \autoref{fig:marshall_diff} with a blue line against the ground truth in black. Given the high number of hourly timesteps along the x-axis spanning the year 2021, for the sake of readability, the temperature differentials are plotted on the y-axis instead of the absolute temperatures. Above the chart the over the whole hourly validation data calculated RMSE and Correlation of the reconstructed series are written. The RMSE for the Marshall station is 2.02°C, which is the highest value among the three weather stations, which models have been trained for. To compare the RMSE to what a direct read out of ERA5 would have been, the plot includes in red the temperature at each timestep at the nearest ERA5 grid point, at the coordinates 39.950° N, 106.196° W. The grid point's location is exactly the location of the weather station in Marshall (see \autoref{fig:available_measurements_marshall}). But the RMSE between the measurements and the temperature time series of that ERA5 grid point, is 4.56°C, which is more than twice as high. Considering that the model was trained on the ERA5 data of the 8x8 grid cells around the station, the model was able to reduce the error significantly. The ERA5 data, as seen in the chart has a substantial low-bias compared to the station which directly relates to the fact that the grid cell of the station already reaches into the Rocky Mountains, as described above. Thus it is especially important, that the reconstruction not just has a lower RMSE which could be achieved in this case just by correcting the low-bias but also beats it's training data in terms of correlation. The calculated correlation coefficient over the validation year 2021 on an hourly basis for the reconstructed temperature and the measurements is 0.982 compared to 0.965 for the ERA5 nearest grid point a significant improvement.
+To begin with Marshall the occasion with the most available training data, all by the model predicted temperatures for the hourly measurements of the validation dataset have been plotted in \autoref{fig:marshall_diff} with a blue line against the ground truth in black. Given the high number of hourly timesteps along the x-axis spanning the year 2021, for the sake of readability, the temperature differentials are plotted on the y-axis instead of the absolute temperatures. Above the chart the over the whole hourly validation data calculated RMSE and Correlation of the reconstructed series are written. The RMSE for the Marshall station is 2.02°C, which is the highest value among the three weather stations, which models have been trained for. To compare the RMSE to what a direct read out of ERA5 would have been, the plot includes in red the temperature at each timestep at the nearest ERA5 grid point, at the coordinates 39.950° N, 106.196° W. The grid point's location is exactly the location of the weather station in Marshall (see \autoref{fig:available_measurements_marshall}). But the RMSE between the measurements and the temperature time series of that ERA5 grid point, is 4.56°C, which is more than twice as high. Considering that the model was trained on the ERA5 data of the 8x8 grid cells around the station, the model was able to reduce the error significantly. The ERA5 data, as seen in the chart has a substantial low-bias compared to the station which directly relates to the fact that the grid cell of the station already reaches into the Rocky Mountains, as described above. Thus it is especially important, that the reconstruction not just has a lower RMSE which could be achieved in this case just by correcting the low-bias but also beats it is training data in terms of correlation. The calculated correlation coefficient over the validation year 2021 on an hourly basis for the reconstructed temperature and the measurements is 0.982 compared to 0.965 for the ERA5 nearest grid point a significant improvement.
 
 \begin{figure}
     \centering
-    \includegraphics[width=\textwidth]{resources/images/charts/marshall_eval_grib_final/Marshall - Daily mean.png}
+    \includegraphics[width=1.07\textwidth]{resources/images/charts/marshall_eval_grib_final/Marshall - Daily mean.png}
     \caption{Reconstructed temperature vs measured temperature for Marshall-Station (Daily mean)}
     \label{fig:marshall_daily}
 \end{figure}
@@ -130,7 +174,7 @@ Even better is the performance of the model when the hourly values are combined 
 
 \begin{figure}
     \centering
-    \includegraphics[width=\textwidth]{resources/images/charts/marshall_eval_grib_final/Marshall, Average Diurnal Cycle.png}
+    \includegraphics[width=1.07\textwidth]{resources/images/charts/marshall_eval_grib_final/Marshall, Average Diurnal Cycle.png}
     \caption{Reconstructed temperature vs measured temperature for Marshall-Station (Average Diurnal Cycle)}
     \label{fig:marshall_diurnal}
 \end{figure}
@@ -142,45 +186,45 @@ It is not surprising, that the RMSE and correlation coefficient improve the more
 
 \begin{figure}
     \centering
-    \includegraphics[width=\textwidth]{resources/images/charts/marshall_eval_grib_final/Marshall, 7 Day Period_1_2_3.png}
+    \includegraphics[width=1.07\textwidth]{resources/images/charts/marshall_eval_grib_final/Marshall, 7 Day Period_1_2_3.png}
     \caption{Reconstructed temperature vs measured temperature for Marshall-Station (7 Day Period)}
     \label{fig:marshall_7day}
 \end{figure}
 
 \begin{figure}
     \centering
-    \includegraphics[width=\textwidth]{resources/images/charts/marshall_eval_grib_final/Marshall - Monthly mean.png}
+    \includegraphics[width=1.07\textwidth]{resources/images/charts/marshall_eval_grib_final/Marshall - Monthly mean.png}
     \caption{Reconstructed temperature vs measured temperature for Marshall-Station (Monthly mean)}
 \end{figure}
 
 
-\subsection*{Vienna Station}
+\subsubsection*{Vienna-Station}
 
 \begin{figure}
     \centering
-    \includegraphics[width=\textwidth]{resources/images/charts/vienna_eval_grib_final/Vienna - Daily mean.png}
+    \includegraphics[width=1.07\textwidth]{resources/images/charts/vienna_eval_grib_final/Vienna - Daily mean.png}
     \caption{Reconstructed temperature for Vienna-Station (Daily mean)}
 \end{figure}
 
 \begin{figure}
     \centering
-    \includegraphics[width=\textwidth]{resources/images/charts/vienna_eval_grib_final/Vienna, Average Diurnal Cycle.png}
+    \includegraphics[width=1.07\textwidth]{resources/images/charts/vienna_eval_grib_final/Vienna, Average Diurnal Cycle.png}
     \caption{Measured temperature for Vienna-Station (Average Diurnal Cycle)}
 \end{figure}
 
 \newpage
 
-\subsection*{Barbados Station}
+\subsubsection*{Barbados-Station}
 
 \begin{figure}
     \centering
-    \includegraphics[width=\textwidth]{resources/images/charts/barbados_eval_grib_final/Barbados - Daily mean.png}
+    \includegraphics[width=1.07\textwidth]{resources/images/charts/barbados_eval_grib_final/Barbados - Daily mean.png}
     \caption{Reconstructed temperature for Barbados-Station (Daily mean)}
 \end{figure}
 
 \begin{figure}
     \centering
-    \includegraphics[width=\textwidth]{resources/images/charts/barbados_eval_grib_final/Barbados, Average Diurnal Cycle.png}
+    \includegraphics[width=1.07\textwidth]{resources/images/charts/barbados_eval_grib_final/Barbados, Average Diurnal Cycle.png}
     \caption{Measured temperature for Barbados-Station (Average Diurnal Cycle)}
 \end{figure}
 

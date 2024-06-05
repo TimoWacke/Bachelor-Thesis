@@ -105,7 +105,12 @@ Training runs have been completed for all stations with up to 1 million iteratio
 
 \subsection{Validation Methods}
 
-\begin{figure}
+As numerical measures of quality, the Root Mean Squared Error (RMSE) and the correlation coefficient were calculated.
+RMSE quantifies proximity between two series in terms of distance (refer to \autoref*{fig: low_rmse}), yet it lacks insight into their trend relationship.
+Conversely, the correlation coefficient gauges the model's fidelity to the overall trend of the observed data (as depicted in \autoref*{fig: high_corr}).
+Notably, high correlation can coexist with significant distance between series.
+
+\begin{figure}[H]
     \centering
     \begin{subfigure}{0.35\textwidth}
         \centering
@@ -123,31 +128,28 @@ Training runs have been completed for all stations with up to 1 million iteratio
     \caption{Comparison of the RMSE and Correlation Coefficient}
 \end{figure}
 
-As numerical measures of quality, the Root Mean Squared Error (RMSE) and the correlation coefficient were calculated. The RMSE is a measure of the differences between predicted and observed values, while the correlation coefficient quantifies the strength and direction of the linear relationship between the two datasets. 
-
-
 \subsubsection*{Root Mean Squared Error (RMSE)}
 
 To quantify how far apart the reconstructed temperature series $\hat{y}$ is from the measured temperature series $y$, where both series have $n$ different timesteps and thus can be seen as vectors, most commonly the root mean squared error (RMSE) comes to help, which is strongly connected to the Euclidean norm of the difference between both vectors $\hat{y} - y$. However, a simple mean absolute error (MAE), also called the Manhattan norm, could seem most intuitive and easiest to understand. It would be calculated just by adding all absolute differences up before dividing it by the length of the series. The RMSE is favored in machine learning and statistics because it penalizes larger differences more than smaller ones, which is more in line with the human perception of errors. 
 
 \begin{equation}
     \text{RMSE} = \sqrt{\frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2}
-    \label{eq:rmse}
+    \label{eq: rmse}
 \end{equation}
 
 \begin{equation}
     \text{MAE} = \frac{1}{n} \sum_{i=1}^{n} |y_i - \hat{y}_i|
-    \label{eq:mae}
+    \label{eq: mae}
 \end{equation}
 
-When converting \autoref*{eq:rmse}, it can be seen how the RMSE is connected to the Euclidean norm:
+When converting \autoref*{eq: rmse}, it can be seen how the RMSE is connected to the Euclidean norm:
 
 \begin{equation}
   \text{RMSE} \cdot \sqrt{n} = \sqrt{\sum_{i=1}^{n} (y_i - \hat{y}_i)^2} = \| y - \hat{y} \|_2  
-  \label{eq:rmse_euclid}
+  \label{eq: rmse_euclid}
 \end{equation}
 
-The Euclidean norm $\| y - \hat{y} \|_2$, of a coordinate in our case the error $\hat{y} - y$ can be imagined as the diagonal distance between the origin and the point with these coordinates. For demonstration purposes, a right triangle in 2-dimensional space can be imagined with the errors at 2 validation timesteps as the legs. The RMSE over both errors would be proportional to the hypothenuse of that triangle which is more dependent on the length of the longer leg than the shorter one. The Manhattan norm (\autoref{eq:mae}), on the other hand, which received its name from the gridded street system of Manhattan is not based on the diagonal distance, but the distance a taxicab in Manhattan would have to drive to travel along the hypothenuse, the equally weighted sum of the legs.
+The Euclidean norm $\| y - \hat{y} \|_2$, of a coordinate in our case the error $\hat{y} - y$ can be imagined as the diagonal distance between the origin and the point with these coordinates. For demonstration purposes, a right triangle in 2-dimensional space can be imagined with the errors at 2 validation timesteps as the legs. The RMSE over both errors would be proportional to the hypothenuse of that triangle which is more dependent on the length of the longer leg than the shorter one. The Manhattan norm (\autoref{eq: mae}), on the other hand, which received its name from the gridded street system of Manhattan is not based on the diagonal distance, but the distance a taxicab in Manhattan would have to drive to travel along the hypothenuse, the equally weighted sum of the legs.
 
 \subsubsection*{Pearson Correlation Coefficient}
 
@@ -155,7 +157,7 @@ The Pearson correlation coefficient (in the following called correlation coeffic
 
 \begin{equation}
     \text{Correlation Coefficient} = \frac{\sum_{i=1}^{n} (y_i - \bar{y})(\hat{y}_i - \bar{\hat{y}})}{\sqrt{\sum_{i=1}^{n} (y_i - \bar{y})^2 \sum_{i=1}^{n} (\hat{y}_i - \bar{\hat{y}})^2}}
-    \label{eq:correlation}
+    \label{eq: correlation}
 \end{equation}
     
 Where $\bar{y}$ and $\bar{\hat{y}}$ are the mean values of the measured and the model output temperature series, respectively. The correlation coefficient is a measure of how well the model output follows the general trend of the measured data. \cite{Zou2003Correlation}
@@ -166,8 +168,8 @@ Where $\bar{y}$ and $\bar{\hat{y}}$ are the mean values of the measured and the 
 
 \begin{figure}
     \centering
-    \includegraphics[width=1.07\textwidth]{resources/images/charts/marshall_eval_grib_final/Marshall, Difference to Measurements.png}
-    \caption{Difference between reconstructed and measured temperature for Marshall-Station}
+    \includegraphics[width=1.02\textwidth]{resources/images/charts/marshall_eval_grib_final/Marshall, Difference to Measurements.png}
+    \caption{Difference between reconstructed and measured hourly temperature for Marshall-Station}
     \label{fig: marshall_diff}
 \end{figure}
 
@@ -175,7 +177,7 @@ To begin with Marshall the occasion with the most available training data, all b
 
 \begin{figure}
     \centering
-    \includegraphics[width=1.07\textwidth]{resources/images/charts/marshall_eval_grib_final/Marshall - Daily mean.png}
+    \includegraphics[width=1.02\textwidth]{resources/images/charts/marshall_eval_grib_final/Marshall - Daily mean.png}
     \caption{Reconstructed temperature vs measured temperature for Marshall-Station (Daily mean)}
     \label{fig: marshall_daily}
 \end{figure}
@@ -184,7 +186,7 @@ Even better is the performance of the model when the hourly values are combined 
 
 \begin{figure}
     \centering
-    \includegraphics[width=1.07\textwidth]{resources/images/charts/marshall_eval_grib_final/Marshall, Average Diurnal Cycle.png}
+    \includegraphics[width=1.02\textwidth]{resources/images/charts/marshall_eval_grib_final/Marshall, Average Diurnal Cycle.png}
     \caption{Reconstructed temperature vs measured temperature for Marshall-Station (Average Diurnal Cycle)}
     \label{fig: marshall_diurnal}
 \end{figure}
@@ -196,46 +198,82 @@ It is not surprising, that the RMSE and correlation coefficient improve the more
 
 \begin{figure}
     \centering
-    \includegraphics[width=1.07\textwidth]{resources/images/charts/marshall_eval_grib_final/Marshall, 7 Day Period_1_2_3.png}
-    \caption{Reconstructed temperature vs measured temperature for Marshall-Station (7 Day Period)}
+    \includegraphics[width=1.02\textwidth]{resources/images/charts/marshall_eval_grib_final/Marshall, 7 Day Period_1_2_3.png}
+    \caption{Reconstructed temperature vs measured hourly temperature for Marshall-Station (7 Day Period)}
     \label{fig: marshall_7day}
 \end{figure}
 
 \begin{figure}
     \centering
-    \includegraphics[width=1.07\textwidth]{resources/images/charts/marshall_eval_grib_final/Marshall - Monthly mean.png}
+    \includegraphics[width=1.02\textwidth]{resources/images/charts/marshall_eval_grib_final/Marshall - Monthly mean.png}
     \caption{Reconstructed temperature vs measured temperature for Marshall-Station (Monthly mean)}
 \end{figure}
 
 
 \subsubsection*{Vienna-Station}
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1.02\textwidth]{resources/images/charts/vienna_eval_grib_final/Vienna, Difference to Measurements.png}
+    \caption{Difference between reconstructed and measured hourly temperature for Vienna-Station}
+\end{figure}
+
 \begin{figure}
     \centering
-    \includegraphics[width=1.07\textwidth]{resources/images/charts/vienna_eval_grib_final/Vienna - Daily mean.png}
+    \includegraphics[width=1.02\textwidth]{resources/images/charts/vienna_eval_grib_final/Vienna - Daily mean.png}
     \caption{Reconstructed temperature for Vienna-Station (Daily mean)}
 \end{figure}
 
 \begin{figure}
     \centering
-    \includegraphics[width=1.07\textwidth]{resources/images/charts/vienna_eval_grib_final/Vienna, Average Diurnal Cycle.png}
+    \includegraphics[width=1.02\textwidth]{resources/images/charts/vienna_eval_grib_final/Vienna, Average Diurnal Cycle.png}
     \caption{Measured temperature for Vienna-Station (Average Diurnal Cycle)}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1.02\textwidth]{resources/images/charts/vienna_eval_grib_final/Vienna, 7 Day Period_1_2_3.png}
+    \caption{Reconstructed temperature vs measured hourly temperature for Vienna-Station (7 Day Period)}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1.02\textwidth]{resources/images/charts/vienna_eval_grib_final/Vienna - Monthly mean.png}
+    \caption{Reconstructed temperature vs measured temperature for Vienna-Station (Monthly mean)}
 \end{figure}
 
 \newpage
 
 \subsubsection*{Barbados-Station}
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1.02\textwidth]{resources/images/charts/barbados_eval_grib_final/Barbados, Difference to Measurements.png}
+    \caption{Difference between reconstructed and measured hourly temperature for Barbados-Station}
+\end{figure}
+
 \begin{figure}
     \centering
-    \includegraphics[width=1.07\textwidth]{resources/images/charts/barbados_eval_grib_final/Barbados - Daily mean.png}
+    \includegraphics[width=1.02\textwidth]{resources/images/charts/barbados_eval_grib_final/Barbados - Daily mean.png}
     \caption{Reconstructed temperature for Barbados-Station (Daily mean)}
 \end{figure}
 
 \begin{figure}
     \centering
-    \includegraphics[width=1.07\textwidth]{resources/images/charts/barbados_eval_grib_final/Barbados, Average Diurnal Cycle.png}
+    \includegraphics[width=1.02\textwidth]{resources/images/charts/barbados_eval_grib_final/Barbados, Average Diurnal Cycle.png}
     \caption{Measured temperature for Barbados-Station (Average Diurnal Cycle)}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1.02\textwidth]{resources/images/charts/barbados_eval_grib_final/Barbados, 7 Day Period_1_2_3.png}
+    \caption{Reconstructed temperature vs measured hourly temperature for Barbados-Station (7 Day Period)}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1.02\textwidth]{resources/images/charts/barbados_eval_grib_final/Barbados - Monthly mean.png}
+    \caption{Reconstructed temperature vs measured temperature for Barbados-Station (Monthly mean)}
 \end{figure}
 
 \newpage

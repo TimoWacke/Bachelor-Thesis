@@ -8,52 +8,62 @@ From the 3D-Paws project (see \autoref{sec:3d_printed_stations}), measurements f
 
 % 3 images side by side with available weather stations
 \begin{figure}
-    \centering
-    \begin{subfigure}{0.672\textwidth}
-        \includegraphics[width=\textwidth]{resources/images/charts/marshall_available_measurements.png}
-        \caption{Station in Marshall, Colorado, USA}
-        \label{fig:available_measurements_marshall}
-    \end{subfigure}
-    \begin{subfigure}{0.672\textwidth}
-        \includegraphics[width=\textwidth]{resources/images/charts/vienna_available_measurements.png}
-        \caption{Station in Vienna, Austria}
-        \label{fig:available_measurements_vienna}
-    \end{subfigure}
-    \begin{subfigure}{0.672\textwidth}
-        \includegraphics[width=\textwidth]{resources/images/charts/barbados_available_measurements.png}
-        \caption{Station in Barbados, Caribbean}
-        \label{fig:available_measurements_barbados}
-    \end{subfigure}
-    \caption{Available data from 3D printed Weather stations}
-    \label{fig:weather_stations}
+\centering
+\begin{subfigure}{0.672\textwidth}
+\includegraphics[width=\textwidth]{resources/images/charts/marshall_available_measurements.png}
+\caption{Station in Marshall, Colorado, USA}
+\label{fig:available_measurements_marshall}
+\end{subfigure}
+\begin{subfigure}{0.672\textwidth}
+\includegraphics[width=\textwidth]{resources/images/charts/vienna_available_measurements.png}
+\caption{Station in Vienna, Austria}
+\label{fig:available_measurements_vienna}
+\end{subfigure}
+\begin{subfigure}{0.672\textwidth}
+\includegraphics[width=\textwidth]{resources/images/charts/barbados_available_measurements.png}
+\caption{Station in Barbados, Caribbean}
+\label{fig:available_measurements_barbados}
+\end{subfigure}
+\caption{Available data from 3D printed Weather stations}
+\label{fig:weather_stations}
 \end{figure}
 
 \begin{wrapfigure}[15]{r}{0.40\textwidth}
-    \centering
-    \includegraphics[width=0.38\textwidth]{resources/images/Marshall_era5.png}
-    \caption{ERA5 Area of the station in Marshall, Colorado}
-    \label{fig:era5_marshall}
+\centering
+\includegraphics[width=0.38\textwidth]{resources/images/Marshall_era5.png}
+\caption{ERA5 Area of the station in Marshall, Colorado}
+\label{fig:era5_marshall}
 \end{wrapfigure}
 
+The station in Marshall is located between Boulder and Denver, next to Marshall Lake, at an elevation of 1,743 meters. It is less than 10 km east of South Boulder Peak, which exceeds 2,600 meters in elevation \cite{southboulderpeak}.
+Further, the station is situated only about 30 km east of the Colorado Front Range, where the Rocky Mountains range in altitude between 3,250 and 4,000 meters \cite{Williams1996}.
+This topographical context is visible in the ERA5 data (\autoref{fig:era5_marshall}).
 
-The station in Marshall is located between Boulder and Denver next to Marshall Lake, on an Elevation of 1743m, less than 10km east of the South Boulder Peak, which is already more than 2600m high \cite{southboulderpeak}. That the station is located just about 30 kilometers east of the Colorado Front Range where the Rocky Mountains range in their altitude between 3250m - 4000m \cite{Williams1996} is visible in the ERA5 data \autoref{fig:era5_marshall}.
+Vienna lies to the west within the Vienna Basin, at a relatively low altitude just beyond the Alpine region. The Alps, which rise moderately to the west of Vienna, reach heights of up to 2,000 meters above sea level within approximately 100 km.
+The ERA5 resolution is sufficient to differentiate atmospheric conditions and topographical features in this region.
+The station itself resides in the north of the city on university grounds at an altitude of 159 meters.
+East of it is the urban Danube Canal, separated from the station by only a main road and a railway line.
 
-Vienna is situated to the west within the Vienna Basin, at a relatively low altitude just beyond the Alpine region. The Alps, which rise moderately western of Vienna, reach heights of up to 2000 meters above sea level in a distance of approximately 100km, meaning the ERA5 resolution is high enough to differentiate the atmospheric conditions and topographical features within this region better.
+The station in Barbados stands in the parish of St. George at an altitude of 274 meters. The island is relatively flat, with its highest point being Mount Hillaby at 340 meters.
+The island's size, approximately 34 km long and 23 km wide, is similar to the size of an ERA5 grid cell.
+As observed in \autoref{fig:barbados}, surrounding grid cells are predominantly oceanic.
+This means the ERA5 data cannot accurately capture the diurnal cycle of the station, which is influenced by its land location, while surrounding cells are mostly oceanic.
 
-The station in Barbados is located in the parish of St George at an altitude of 274m, the island itself is relatively flat with the highest point being Mount Hillaby at 340m. The island is 34km long and up to 23km wide, which is approximately the size of an ERA5 grid cell, but as can be observed in \autoref{fig:barbados} all surrounding grid cells are ocean heavy, while the stations location on Barbados is close the the point where the landmass is the widest. The ERA5 data is therefore not able to capture the diurnal cycle of the station as it is located on land, while the surrounding grid cells are mostly ocean.
+\subsection{Data Availability}
 
-\subsection{Data availability}
-The measurements span up to late 2023, with the quantity of available temperature data varying significantly between stations. The station in Marshall is one of the oldest in the 3D-Paws project and has the most available measurements among the three stations. The weather station in Vienna also has data dating back to 2017, but it has been almost entirely offline since mid-2019.
-The weather station in Barbados began recording in mid-2020.
-In \autoref{fig:weather_stations} the measurements of the three stations are displayed, after data cleansing and converting them on an hourly basis. The measurements were provided by the NCAR with most invalid values already marked as such but especially in Barbados the sensors had more noise and occasional invalid measurements such that they needed extra cleansing. To do so, values at temperatures near zero and below were excluded. The conversion from minute to hourly data was done by taking the average of all minute values in that specific hour, but only if there were more than 20 values available and only if the values weren't all the same. It has been observed that the sensors sometimes get stuck and then deliver the same value for a longer period. The dataset for the Marshall station spans from 2017 to 2023, comprising 41,883 data points. These measurements reveal three significant data gaps along with several smaller ones. The larger intervals without data include the midsummer period of 2018, late 2019 to early 2020, and the most extensive gap occurring over five months from September 2019 to January 2020
+The measurements span up to late 2023, with the quantity of available temperature data varying significantly between stations. The station in Marshall, one of the oldest in the 3D-Paws project, has the most available measurements among the three stations. The weather station in Vienna has data dating back to 2017, but it has been almost entirely offline since mid-2019. The weather station in Barbados began recording in mid-2020.
 
-For the Vienna Station, measurements are available for only 12,477 hours, which is less than a third compared to Marshall. This is primarily due to extended downtimes starting from mid-2018, resulting in few to no measurement data. Except for a brief period from late 2018 to July 2019, when continuous measurements resumed. After that, there were only sporadic data collection instances, before the station went preliminary offline in April 2022.
+\autoref{fig:weather_stations} shows the measurements from the three stations after data cleansing and conversion to an hourly basis. The measurements were provided by the US National Center for Atmospheric Research (NCAR), with most invalid values already marked. However, especially in Barbados, the sensors had more noise and occasional invalid measurements, requiring extra cleansing. Temperatures near zero and below were excluded. The conversion from minute to hourly data was done by averaging all minute values in each hour, provided there were more than 20 values available and they were not all the same. It was observed that the sensors sometimes got stuck, delivering the same value for extended periods.
 
-The Barbados Station only suffered 2 downtimes that were significantly longer than a month with the biggest being roughly the first half of 2021 and the 2nd biggest being the first quarter of 2023. In total the station has 17,315 hours of measurements, which is still less than half of the Marshall station. 
+The dataset for the Marshall station spans from 2017 to 2023, comprising 41,883 data points. These measurements reveal three significant data gaps, with larger intervals without data occurring in the midsummer period of 2018, late 2019 to early 2020, and the most extensive gap from September 2019 to January 2020.
+
+For the Vienna station, measurements are available for only 12,477 hours, less than a third compared to Marshall. This is primarily due to extended downtimes starting from mid-2018, with few to no measurements except for a brief period from late 2018 to July 2019. After that, there were only sporadic data collection instances, before the station went offline in April 2022.
+
+The Barbados station had two significant downtimes longer than a month, the largest being the first half of 2021 and the second being the first quarter of 2023. In total, the station has 17,315 hours of measurements, still less than half of the Marshall station.
 
 \subsubsection*{Splitting into Training and Validation Data}
 
-As explained in \autoref{sec: design}, the measurements are split into a training and validation dataset. The training dataset is used to train the model, while the validation dataset will be kept aside to compare it to what the model predicts after the training to validate if and to which extent the model learned to reconstruct the missing data. If the validation data would be included in the training data, the model would be able to predict the values it has already seen, but it would be impossible to tell if the model learned to generalize the local wather patterns.
+As explained in \autoref{sec: design}, the measurements are split into a training and validation dataset. The training dataset is used to train the model, while the validation dataset will be kept aside to compare it to what the model predicts after the training to validate if and to which extent the model learned to reconstruct the missing data. If the validation data would be included in the training data, the model would be able to predict the values it has already seen, but it would be impossible to tell if the model learned to generalize the local weather patterns.
 Starting with the Marshall station, the data was sufficient to extract an entire year as validation data. Excluding a consecutive year from the training data not only allows for a comprehensive analysis of a full yearly cycle but also ensures that the model relies solely on the general weather patterns it learned from the training data to predict the values of the validation data. This approach prevents the model from potentially "cheating" by accessing information from nearby training data points, which could compromise the integrity of the validation process. It is a common practice in the machine learning field to validate data as a contiguous set, as it helps to maintain the independence and integrity of the validation process. 2021 highlighted in blue in \ref{fig:available_measurements_marshall} was the most complete year in the Marshall dataset thus it was chosen as the validation data. With the mask of 2021 applied the training data for Marshall consists of 34,188 hours of measurements which is about 82\% of the total data.
 
 For the Vienna station, the data was split into training and validation data based on the availability of the data. The training data consists of all available data up to 2019, while the validation data is the year 2019. Resulting in 9,593 hours of measurements used as training data, which is about 77\% of the total data. The limited availability of measurements didn't allow for a full year of validation data.
@@ -70,21 +80,21 @@ The Barbados station also only had 2022 and 2023 as a complete available years, 
 %Table with the data availability and the split into training and validation data
 
 \begin{table}
-    \centering
-    \begin{tabular}{|c|c|c|c|c|}
-        \hline
-        Station & Total Data & Training Data & Validation Data & Validation Ratio \\
-        \hline
-        Marshall & 41,883 & 34,188 & 7,695 & 0.18 \\
-        Barbados & 17,315 & 14,576 & 2,739 & 0.16 \\
-        Vienna & 12,477 & 9,593 & 2,884 & 0.23 \\
-        \hline
-    \end{tabular}
-    \caption{Data availability and split into training and validation data}
-    \label{tab:data_split}
+\centering
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+Station & Total Data & Training Data & Validation Data & Validation Ratio \\
+\hline
+Marshall & 41,883 & 34,188 & 7,695 & 0.18 \\
+Barbados & 17,315 & 14,576 & 2,739 & 0.16 \\
+Vienna & 12,477 & 9,593 & 2,884 & 0.23 \\
+\hline
+\end{tabular}
+\caption{Data availability and split into training and validation data}
+\label{tab:data_split}
 \end{table}
 
-\subsubsection*{Execution of Train}
+\subsubsection*{Execution of Training}
 
 For the training and validation data, the corresponding temperature data of the 64 ERA5 grid cells in the regions of each station was obtained.
 The 8x8 grid cells were chosen to be centered as well as possible around each weather station, given the specific ERA5 coordinates.

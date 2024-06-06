@@ -102,7 +102,9 @@ return month_dict
 \subsection{Copernicus Climate Data Store - CDS API}
 \label{sec: cds_api}
 
-The Copernicus Climate Data Store (CDS) is a service by the European Centre for Medium-Range Weather Forecasts (ECMWF). The CDS API provides opensource access to the ERA5 data, allowing users to download the data for a specific location and time period. After creating an account online an API Key can be obtained for free and with the python module 'cdsapi' data can be downloaded then easily in .grib format. 
+The Copernicus Climate Data Store (CDS) is a service by the European Centre for Medium-Range Weather Forecasts (ECMWF).
+The CDS API provides open source access to the ERA5 data, allowing users to download the data for a specific location and time period.
+After creating an account online an API Key can be obtained for free and with the python module 'cdsapi' data can be downloaded then easily in .grib format. 
 
 \begin{lstlisting}[caption=Download Hook for ERA5 Data, label=lst:download_hook]
 import cdsapi
@@ -141,7 +143,8 @@ class Era5DownloadHook:
 \end{lstlisting}
 
 As seen in the code snippet, the request needs to include besides basic informations such as variable / format / model, the regional selection and the selection in the time dimension.
-to download a few hours in a day the following can be used. When building requests that download a month or a full year, it becomes obvious why the \autoref{lst:available_ranges} is so useful.
+to download a few hours in a day the following can be used.
+When building requests that download a month or a full year, it becomes obvious why the \autoref{lst:available_ranges} is so useful.
 
 \begin{lstlisting}[caption=Download Hours in Same Day in Download Hook Class, label=lst:download_hours_in_same_day]
     def download_hours_in_same_day(self, year, month, day, hours, target_folder):
@@ -153,12 +156,14 @@ to download a few hours in a day the following can be used. When building reques
         }, f"{year}_{month}_{day}.grib")
 \end{lstlisting}
 
-In the \autoref{lst:download_hook} it can be seen that the regional selection is always +/- 1 degree around the Station location. This ensures because of the grid interval of 0.25° that the downloaded area always includes at least 9x9 grid points, such that when cropping to an 8x8 selection the station can always be centered, even without exact knowledge of the coordinates of the desired grid points prior requesting. 
+In the \autoref{lst:download_hook} it can be seen that the regional selection is always +/- 1 degree around the Station location.
+This ensures because of the grid interval of 0.25° that the downloaded area always includes at least 9x9 grid points, such that when cropping to an 8x8 selection the station can always be centered, even without exact knowledge of the coordinates of the desired grid points prior requesting. 
 
 
 \subsection{Data Preprocessing}
 
-As pointed out in \autoref{sec: cds_api} the data is downloaded in .grib format. Using the program 'cdo' the data can be quickly converted to .nc format. With the following simple command
+As pointed out in \autoref{sec: cds_api} the data is downloaded in .grib format. Using the program 'cdo' the data can be quickly converted to \code{.nc} format.
+With the following simple command
 
 \begin{lstlisting}
 cdo -f nc copy {source_path} {nc_path}
@@ -189,29 +194,38 @@ Then the files are merged using
     cdo cat {temp_dir_path}/*.nc {era5_target_file_path}
 \end{lstlisting}
 
-before the data is cropped to the 8x8 grid around the station location, as described in \Ref{subsec:data_preprocessing}.
+before the data is cropped to the 8x8 grid around the station location, as described in \Ref{subsec: data_preprocessing}.
 
-For training the data it needs to be assured that the ERA5 data does not include timesteps that the nc file of the station data does not include so that the time dimensions are identical. This is done in two steps, first the ERA5 data is cropped using a start / end date approach using the first and last date of the station data. Then all hours that were missing in the station dataset, identified by the find gaps method in \autoref{lst:find_gaps}, are removed from the ERA5 data. This is done using the python module xarray and deleting the timesteps in batches of up to 1000 timesteps, as deleting all at once could cause issues.
+For training the data it needs to be assured that the ERA5 data does not include timesteps that the nc file of the station data does not include so that the time dimensions are identical.
+This is done in two steps, first the ERA5 data is cropped using a start / end date approach using the first and last date of the station data.
+Then all hours that were missing in the station dataset, identified by the find gaps method in \autoref{lst:find_gaps}, are removed from the ERA5 data.
+This is done using the python module xarray and deleting the timesteps in batches of up to 1000 timesteps, as deleting all at once could cause issues.
 
 The station data should have the same dimensions as the ERA5 data, so a method is applied that coppies the ERA5 dataset and replaces all the temperature values with the measured value from the corresponding hour in the station data.
 
 For evaluating the model, in a validation procedure the same preparation of ERA5 data is done, however instead of passing the station data as expected output to the model, the file will not be filled with the measured values but with \code{NaN}s.
 
-When evaluating the model not for validation but to infill missing values, the ERA5 data needs to be prepared differently of course. Instead of requesting monthly data from the cdsapi, it is requesting only the missing hours day by day, such that the time-dimesion is directly as desired, and preprocessing only needs to handle the conversion and geographical cropping.
+When evaluating the model not for validation but to infill missing values, the ERA5 data needs to be prepared differently of course.
+Instead of requesting monthly data from the cdsapi, it is requesting only the missing hours day by day, such that the time-dimesion is directly as desired, and preprocessing only needs to handle the conversion and geographical cropping.
 
-\subsection{Evaluation}
+\subsection{Handling the Model Output}
 
-Because CRAI is using the encode, decode architecture with connected layers as described in \autoref{subsec:cnn}, the output file in \code{NetCDF} format that the model produces includes not only one temperature value per timestep but has the same dimensions as the input ERA5 file meaning it uses the same 8x8 grid with 64 temperature values. However since it has been trained on input files where the ground truth was also laid on the 8x8 grid, the 64 temperature values in the output data of the model tend to be extremely similar.
-As a standard to compare the the groud truth with the reconstruction and the ERA5 data as in \autoref{sec: results}, a method is implemented that takes in a file for each data. The output file of the model and the ERA5 file for the model have the same spatial dimensions spanning over the 64 coordinates. The file for the measurements is the one created by \code{DatToNcConverter} which is different to the 
-
-To efficiently make this transformation and establish a standard again a method is implemented, that takes in the output file of the model and the training dataset file with the measurements and creates a  
-
-To efficiently make 
-
-% def era5_vs_reconstructed_comparision_to_df(era5_path, reconstructed_path, measurements_path):
-
-
-% def plot_n_steps_of_df(df, coords, as_delta, n=None, title=None, save_to=False):
-
- % \subsection{Infilling for reconstruction}
-
+Because CRAI is using the encode, decode architecture as described in \autoref{subsec: cnn}, the output file in \code{NetCDF} format that the model produces includes not only one temperature value per timestep but has the same dimensions as the input ERA5 file meaning it uses the same 8x8 grid with 64 temperature values.
+However since it has been trained on input files where the ground truth was also laid on the 8x8 grid, the 64 temperature values in the output data of the model tend to be extremely similar.
+To make this transformation but primarily for practical reasons, the output file will be converted to a pandas dataframe again, where the calculated mean of the 64 values is stored.
+There are two different methods implemented however creating different dataframes, as the model is evaluated in two different usecases.
+One is the validation of the model, where the output is compared to the ground truth, and as in \autoref{sec: results} to ERA5 nearest grid point.
+The other is the infilling of missing values, where the output is not compared but the original dataframe of the station data is updated with reconstructed values.
+Both methods take the output file of the model as input, while the validation method also needs to take the groud truth and ERA5 into account.
+For the ground truth, the file created by the \code{DatToNcConverter} is used, while for the ERA5 data the file that has been passed to the model is used.
+The ground truth file still is using the coordinates of the station and is not stretched to the 8x8 grid, as it had been done in the training.
+Therefore the method to create the validation dataframe \code{era5\_vs\_reconstructed\_comparision\_to\_df} can obtain the station coordinates from that file, and then decide which grid point in the ERA5 data is the nearest to the station.
+To highlight one last core method, \code{plot\_n\_steps\_of\_df} is very useful during validation and powered the standardized plotting of the results (\autoref{fig: validation_results}).
+It takes in the dataframe, returned by \code{era5\_vs\_reconstructed\_comparision\_to\_df}, and plots the temperature values of the station, the ERA5 nearest grid point, and the reconstructed values for a specific number of timesteps.
+One handy feature is that if a number of timesteps is given it will plot the only that amount of timesteps, allowing for a more detailed view of the results.
+It chooses the extract of \code{n} consecutive timesteps randomly, leading to the weekly extract plots in \autoref{fig: validation_results}.
+In all the created plots in \autoref{fig: validation_results} the RMSE and the correlation coefficient are calculated and displayed in the title of the plot,
+that has also been done in the method \code{plot\_n\_steps\_of\_df}.
+Lastly, the method is also able to plot the temperature differentials instead of the absolute values, when told to do so by an optional boolean flag.
+It offsets the values of course after the calculation of the RMSE and correlation coefficient.
+In all these functionalities, the plotting method heavily benefits from the creation of the dataframe, as it can slice along the time dimension conveniently.

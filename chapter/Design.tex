@@ -38,7 +38,7 @@ Therefore, when reconstructing missing data, the model is applied to the ERA5 da
 % In \autoref{fig: barbados} ERA5 grid points around a weather station on Barbados are shown along with their corresponding temperature two meters above the surface. The graph is for the hour 19:00 UTC on the 23rd of June 2020. Along the latitude and longitude lines 8 grid points are selected in each dimension, such that the weather station is centered, meaning it lays between the 4th and 5th grid point in each dimension. The available longitudes and latitudes in the ERA5 model are spaced by 0.25° along the latitude and longitude from each other, which means an almost fixed distance along the latitude while the width along the longitude varies depending on how close to the poles/equator the grid points are, obviously going close to zero neat the poles. In the case of Barbados at a latitude of 13 deg the distance between 2 gridpoints along the longitude is still about 27 km.
 
 \subsection{Data Acquisition and Preprocessing}
-\label{subsec:data_preprocessing}
+\label{subsec: data_preprocessing}
 Upon obtaining a dataset from a weather station, it is determined where temperature data is missing.
 While the weather station dataset is minute-based, data could be missing only for a few minutes within an hour instead of the full hour.
 This would raise the question of how many missing values are acceptable to not mark the hour as missing.
@@ -69,6 +69,6 @@ Upon successful training and validation, the model is trained again with the mea
 After training on the complete data, the CNN can be used to fill gaps.
 Fundamentally, the predictions can be made for any list of timesteps. Firstly, the needed ERA5 data, for the respective timesteps will be obtained, and secondly cropped in the same way to the geographical region as during training and then given as input to the model.
 The result is a list of temperature values that are not connected in time but are the model's prediction for the temperature at the weather station at the respective time.
-To predict the temperature at all those times where measurements are missing, preprocessing work can be shortened, with the available datasets already prepared in \ref{subsec:data_preprocessing}.
+To predict the temperature at all those times where measurements are missing, preprocessing work can be shortened, with the available datasets already prepared in \ref{subsec: data_preprocessing}.
 For the training the ERA5 dataset was already split into one with all hours marked as missing and one with all hours marked as present.
 Thus, the model can directly be applied to the dataset with all hours marked as missing and then directly filled into the original measurements dataset.

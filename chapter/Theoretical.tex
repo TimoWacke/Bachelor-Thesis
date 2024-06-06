@@ -2,7 +2,7 @@
 \label{sec: theory}
 
 \subsection{Convolutional Neural Networks}
-\label{subsec:cnn}
+\label{subsec: cnn}
 
 CNNs are a type of deep learning architecture inspired by the visual cortex of animals. \cite{Yamashita2018CNN, hubel1968receptive}. They are designed to efficiently capture spatial and temporal dependencies in data through the use of learnable filters and hierarchical feature representations. \cite{Yamashita2018CNN}. Through the use of convolutional layers instead of fully connected layers, the architecture is able to preserve the spatial structure of the input data, making it particularly well-suited for image and video data. This approach not only simplifies pattern detection but also implies a reduction in the number of parameters, which minimizes the necessary computational resources.
 
@@ -63,7 +63,7 @@ To map the output of the convolutional layer to a meaningful space, and to avoid
 The exact position of a low-level feature in the input data is not so important when it comes to detecting high-level features,
 it is more important to recognize if a feature is present at all in area of the input data or not.
 Thus scaling down the resolution of the matrix by combining every 2x2 submatrix into one value can be beneficial.
-A possible way to aggregate them is by taking the maximum value of the submatrix, which will work for the mentioned purpose of detecting if a feature is present in the area of the submatrix or not. In \autoref{fig: convolution_operation} the convolution operation itself also reduces the shape of the input data, which is because close to the borders of the input data the kernel can not be applied entirely, but in this work it is avoided by padding the input data. For the 8x8 grid cells of the ERA5 data, that is used as input in the laid out approach (see \autoref{subsec:data_preprocessing}), the architecture of the CNN could include a maximum of 3 pooling layers, reducing the input data to a 1x1 matrix as seen in \autoref{fig: max_pooling}. \autoref{fig: max_pooling} just illustrates the downsampling of the data, in the actual architecture, pooling layers always come together with convolutional layers and are never applied directly after each other as seen in the encoder part of \autoref{fig: encoder_architecture}.
+A possible way to aggregate them is by taking the maximum value of the submatrix, which will work for the mentioned purpose of detecting if a feature is present in the area of the submatrix or not. In \autoref{fig: convolution_operation} the convolution operation itself also reduces the shape of the input data, which is because close to the borders of the input data the kernel can not be applied entirely, but in this work it is avoided by padding the input data. For the 8x8 grid cells of the ERA5 data, that is used as input in the laid out approach (see \autoref{subsec: data_preprocessing}), the architecture of the CNN could include a maximum of 3 pooling layers, reducing the input data to a 1x1 matrix as seen in \autoref{fig: max_pooling}. \autoref{fig: max_pooling} just illustrates the downsampling of the data, in the actual architecture, pooling layers always come together with convolutional layers and are never applied directly after each other as seen in the encoder part of \autoref{fig: encoder_architecture}.
 In this work, the pooling is integrated into the convolution operation by using a step size of 2 when sliding the kernel over the input data, reducing the shape of the data by half in each dimension.
 
 \subsubsection*{Decoder}

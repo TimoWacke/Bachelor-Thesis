@@ -6,7 +6,7 @@
 \begin{figure}
     \centering
     \includegraphics[width=0.9\textwidth]{resources/images/ERA5_tas_around_barbados.png}
-    \caption{8x8 grid-points of ERA5 with 2m temperature 
+    \caption{8x8 grid-points of ERA5 with the 2-meter temperature 
     for 2020-06-23 19:00 UTC  in the area of a weather station on Barbados}    
     \label{fig: barbados}
 \end{figure}
@@ -24,7 +24,8 @@ The idea is that a Convolutional Neural Network would learn to recognize the rel
 Based on the regional ERA5 data, the network would then predict the temperature at the weather station.
 To illustrate with an example in what form these discrepancies can emerge:
 In the case of Barbados, the grid cells of the ERA5 data all lay primarily in the ocean, meaning the diurnal cycle has a much lower amplitude than at the weather station that is located on land.
-The neural network would need to learn how to detect the diurnal cycle phase based on the 64 grid points and then adjust the temperature values accordingly. Besides this obvious difference between ERA5 and the measurements at Barbados, there are most likely many more dynamic local effects to be learned and adjusted for.
+The neural network would need to learn how to detect the diurnal cycle phase based on the 64 grid points and then adjust the temperature values accordingly.
+Besides this obvious difference between ERA5 and the measurements at Barbados, there are most likely many more dynamic local effects to be learned and adjusted for.
 
 Since the ERA5 data is available globally and hourly, any weather station's missing hour could be reconstructed simply with a model that has been trained for the respective station.
 A supervised learning approach will be used to train the model (see \autoref{fig: supervised_learning}).
@@ -35,8 +36,6 @@ The disadvantage is that the model can not learn from the sequence of timesteps,
 However, that is not anticipated to be a problem since all that information is already included in the ERA5 data.
 Therefore, when reconstructing missing data, the model is applied to the ERA5 data hour by hour, and the result is a series of hourly predictions that are not connected in time.
 
-% In \autoref{fig: barbados} ERA5 grid points around a weather station on Barbados are shown along with their corresponding temperature two meters above the surface. The graph is for the hour 19:00 UTC on the 23rd of June 2020. Along the latitude and longitude lines 8 grid points are selected in each dimension, such that the weather station is centered, meaning it lays between the 4th and 5th grid point in each dimension. The available longitudes and latitudes in the ERA5 model are spaced by 0.25° along the latitude and longitude from each other, which means an almost fixed distance along the latitude while the width along the longitude varies depending on how close to the poles/equator the grid points are, obviously going close to zero neat the poles. In the case of Barbados at a latitude of 13 deg the distance between 2 gridpoints along the longitude is still about 27 km.
-
 \subsection{Data Acquisition and Preprocessing}
 \label{subsec: data_preprocessing}
 Upon obtaining a dataset from a weather station, it is determined where temperature data is missing.
@@ -45,16 +44,17 @@ This would raise the question of how many missing values are acceptable to not m
 Sure is, that if all temperature values are missing during an hour, the hour is marked as missing.
 The ERA5 data then needs to be cropped to the neighboring 8x8 grid cells, while centering the cutout as close to the weather station as possible.
 The available longitudes and latitudes in the ERA5 model are spaced by 0.25° along the latitude and longitude from each other, when 8x8 grid cells are selected it needs to be assured that the grid points are such selected that the coordinates of the weather station are between the 4th and 5th grid point in each dimension.
-After cropping the ERA5 dataset geographically, the data needs to be cut and divided along the time axis to match the weather station data, leading to two datasets: one with all the hours marked as missing and one with all the hours marked as present. Until the model is trained, only the dataset with all the hours marked as present will be used.
+After cropping the ERA5 dataset geographically, the data needs to be cut and divided along the time axis to match the weather station data, leading to two datasets: one with all the hours marked as missing and one with all the hours marked as present.
+Until the model is trained, only the dataset with all the hours marked as present will be used.
 
 As a result, we have a dataset pair of weather station measurements and ERA5 data, that are coherent in time and space.
 
-To determine after the training if and to which extent the model learned to reconstruct the missing data, the dataset pair is split again along the time axis into a pair of station with ERA5 data for training and a pair of station with ERA5 data for validation. Thus we can later let the model reconstruct values that have actually been measured but haven't been included in the training so we then can validate how successful the reconstruction is.
+To determine after the training if and to which extent the model learned to reconstruct the missing data, the dataset pair is split again along the time axis into a pair of station with ERA5 data for training and a pair of station with ERA5 data for validation.
+Thus we can later let the model reconstruct values that have actually been measured but haven't been included in the training so we then can validate how successful the reconstruction is.
 With the datasets prepared, the next phase involves configuring and training the Convolutional Neural Network (CNN) for the temperature reconstruction task.
 The CNN architecture is tailored to accept input in the form of 8x8 grid cells centered around the weather station's location.
 Employing a supervised learning approach, the CNN is trained using pairs of hourly temperature data from the weather station and corresponding grid cell data from ERA5.
 The training process iteratively feeds batches of data into the CNN, fine-tuning its parameters to minimize prediction errors and optimize accuracy in reconstructing missing temperature values.
-
 
 \subsection{Model Evaluation}
 Following the training phase, the CNN's performance is evaluated using the validation set.

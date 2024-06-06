@@ -1,29 +1,38 @@
-\section{Process Orchestration + API \& Webinterface}
+\section{Process Orchestration + API \& Web interface}
 \label{sec: process_orchestration}
 
-\subsection{Executer Classes: Training, Infilling, Validation}
+As foretold in \autoref{sec: implementation_introduction}, the idea is to create a system that allows for efficient execution of the three different pipelines: Training, Infilling, and Validation.
+With the foundation of the previous chapter we have all the necessary preprocessing and postprocessing routines in place.
+When we succeed in creating the next abstraction layer, allowing for easy execution of the different pipelines, such that they handle their process autonomously, we can present an end-to-end solution.
 
-The challenge for the foretold Web interface and API solution is to store different station data, independently and to dynamically control processes for each station.
-The root of the executer classes is to control the needed processes for Training, Infilling, and Validation.
-This begins with passing the corresponding Station object to the executor class and for the process dedicated temporary folders are created, etc.
-The executors are designed as classes to allow for easy access to the different data of the process entity itself at all steps, from ERA5 download to plotting.
+The achieved end-to-end solution comes with a web interface, allowing for an easy user experience.
+It gives the user everything they need to have control over the entire process, from submitting a dataset to downloading validation/training or infilling results.
+Such a web interface requires defined touchpoints between the user's web browser and the server where the system is running.
+A solution featuring programmatically defined touchpoints is called an API (Application Programming Interface), where a defined endpoint is available for each use case.
+An overview of the API endpoints is given in \autoref{sec: api}. 
 
-The \code{TrainingExecuter} class is structured such that all needed inputs are directly passed on object creation, but the pipeline steps are initiated not from the class constructor but from an extra method called \code{execute} which allows for a similar \code{execute\_with\_sbatch} version which is useful when using the code stack on a supercomputer like Levante.
+\subsection{Executor Classes: Training, Infilling, Validation}
+
+The challenge for the foretold web interface and API solution is to store different station data independently and to control processes for each station dynamically.
+This begins with passing the corresponding Station object to the executor class, which needs to initialize the process, including the creation of dedicated temporary folders.
+The executors are designed as classes to allow for easy access to the different data of the process entity itself at all steps, from ERA5 download to plotting. For example, it ensures that when plotting after the CRAI module has finished the evaluation 
+
+The \code{TrainingExecutor} class is structured such that all needed inputs are directly passed on object creation. However, the pipeline steps are initiated not from the class constructor but from an extra method called \code{execute}. This design decision allows for a similar \code{execute\_with\_sbatch} version that can be run instead. Using \code{sbatch} is useful when using the code stack on a supercomputer like Levante at the German Climate Computing Center.
 The execution first runs the download steps for the ERA5 data which is a combination of a few routines described in \autoref{sec: implementation}: Identifying the available timesteps, downloading the data, merging the .grib files, converting to NetCDF files, and cropping in the space and time dimensions as described above.
 This is where the benefit of the work in the previous chapter comes into play, as all of that is controlled by just a few lines and even undisturbed of temp-folder management which is directly included in the routines from \autoref{sec: implementation}.
-After completion of the preprocessing steps, when the necessary coherent training files are saved in the temp-folders of the executer object, it generates the \code{training-args.txt} which is used as the input parameters for the separate machine learning code stack.
+After completion of the preprocessing steps, when the necessary coherent training files are saved in the temp-folders of the executor object, it generates the \code{training-args.txt} which is used as the input parameters for the separate machine learning code stack.
 That file not only specifies how exactly the training should be executed and for how many iterations but also includes information about where the output, respectively the model files, should be saved.
-As this is specified by one of the executer-objects properties, it is troublefree to handle the saving of the model wherever needed.
+As this is specified by one of the executor-objects properties, it is troublefree to handle the saving of the model wherever needed.
 
-The \code{EvaluationExecuter} used for the infilling routine is structured similarly to the \code{TrainingExecuter}, but with the difference that the input parameters must include a model path, and that the download routines to obtain ERA5 data use the times where measurements are missing, instead of the times where measurements are available.
+The \code{EvaluationExecutor} used for the infilling routine is structured similarly to the \code{TrainingExecutor}, but with the difference that the input parameters must include a model path, and that the download routines to obtain ERA5 data use the times where measurements are missing, instead of the times where measurements are available.
 The class has an execute function as well which runs the different steps one after the other, but can be manipulated if certain steps such as the download of the ERA5 data should be run differently.
 The \code{training-args.txt} file for the CRAI module is generated similarly but of course with the parameters needed for evaluation.
 
-The Validation Executer is structured similarly to the \code{EvaluationExecuter}, but has the download routine of the \code{TrainingExecuter}, to obtain the ERA5 data for the times when measurements are available.
-Also after the successful evaluation of the model, the plots for the comparison of the predictions with the actual measurements are generated and saved in the temp-folder of the executer object.
+The Validation Executor is structured similarly to the \code{EvaluationExecutor}, but has the download routine of the \code{TrainingExecutor}, to obtain the ERA5 data for the times when measurements are available.
+Also after the successful evaluation of the model, the plots for the comparison of the predictions with the actual measurements are generated and saved in the temp-folder of the executor object.
 The plots also are generated comfortably with the plotting routine from \autoref{sec: implementation}.
 
-\subsection{Webinterface}
+\subsection{Web interface}
 
 \begin{wrapfigure}[11]{r}{0.5\textwidth}
 \centering

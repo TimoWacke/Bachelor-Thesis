@@ -230,16 +230,17 @@ The chart is chosen to be representative, while some weeks have a better fitting
 % RMSE reconstructed 0.41, RMSE ERA5 3.60, Correlation reconstructed 0.999, Correlation ERA5 0.998
 % super good result but of course monthly means...
 
-\subsection{Vienna-Station}
+\subsection*{Vienna-Station}
 \begin{figure}[H]
 \centering
 \includegraphics[width=1.00\textwidth]{resources/images/charts/vienna_eval_grib_final/Vienna, Difference to Measurements.png}
 \caption{Difference between reconstructed and measured hourly temperature for Vienna-Station}
+\label{fig: vienna_diff}
 \end{figure}
 % RMSE reconstructed: 1.19, RMSE ERA5: 1.39, Correlation reconstructed: 0.991, Correlation ERA5: 0.989
 
 Similar to the Marshall-Station the plots for the Vienna-Station follow the same structure.
-Again, a plot over the full validation period on an hourly basis, daily and monthly aggregated ones and the diurnal cycle as well as an extract of a week, are shown.
+Again, a plot over the full validation period on an hourly basis (\autoref{fig: vienna_diff}), daily (\autoref{fig: vienna_daily}) and monthly (\autoref{fig: vienna_monthly}) aggregated ones and the diurnal cycle (\autoref{fig: vienna_diurnal}) as well as an extract of a week (\autoref{fig: fig: vienna_7day}), are shown.
 However, an important difference is that as the available data of the station in Vienna was so limited, we only included half a year in the validation data.
 Also, to put the validation of the reconstruction in perspective, it needs to be considered that the RMSE and correlation coefficient, in relation to the ERA5 data in Vienna, are by far the best among the three stations.
 1.19°C RMSE and 0.991 correlation coefficient for the reconstructed temperature compared to 1.39°C RMSE and 0.989 correlation coefficient for the ERA5 data at the nearest grid point.
@@ -296,27 +297,44 @@ The only issue visible is that ERA5 has a slightly low bias, which the model min
     \centering
     \includegraphics[width=1.00\textwidth]{resources/images/charts/barbados_eval_grib_final/Barbados, Difference to Measurements.png}
     \caption{Difference between reconstructed and measured hourly temperature for Barbados-Station}
+    \label{fig: barbados_diff}
 \end{figure}
 % RMSE reconstructed: 1.43, RMSE ERA5: 2.14, Correlation reconstructed: 0.666, Correlation ERA5: 0.478
 % super low correlation for era5, improved but compared to other stations still low
 % big gap  visible again of 1month+ in the beginning because missing data
 
+Lastly, for the Barbados station, the model was able to improve the RMSE from 2.14°C for the ERA5 data to 1.43°C for the reconstructed hourly temperature over the full validation data (\autoref{fig: barbados_diff}).
+The ERA5 data had a very low correlation coefficient of 0.478, which is by far the lowest among the three stations.
+
 \begin{figure}
     \centering
     \includegraphics[width=1.00\textwidth]{resources/images/charts/barbados_eval_grib_final/Barbados - Daily mean.png}
     \caption{Reconstructed temperature for Barbados-Station (Daily mean)}
+    \label{fig: barbados_daily}
 \end{figure}
 % RMSE reconstructed: 0.65, RMSE ERA5: 1.54, Correlation reconstructed: 0.786, Correlation ERA5: 0.788
 % on daily basis correlation fairly high again, as the biggest difference in Barbados comes through the diurnal cycle
+
+In \autoref{fig: barbados_daily}, the daily mean temperature is plotted for the Barbados station. For the ERA5 data the RMSE did not improve as much as the correlation coefficient, which is now at 0.788, while the RMSE is at 1.54°C. This indicates that the low correlation coefficient of the ERA5 data is mainly due to the diurnal cycle, which is not captured by the ERA5 data. 
 
 \begin{figure}
     \centering
     \includegraphics[width=1.00\textwidth]{resources/images/charts/barbados_eval_grib_final/Barbados, Average Diurnal Cycle.png}
     \caption{Measured temperature for Barbados-Station (Average Diurnal Cycle)}
+    \label{fig: barbados_diurnal}
 \end{figure}
 % RMSE reconstructed 0.55, RMSE ERA5 2.03, Correlation reconstructed 0.964, Correlation ERA5 0.482
 % super good effort here in the reconstruction, the diurnal cycle in era5 which was the input data is basically flat, hence has a low correlation, but the model was able to reconstruct the diurnal cycle of the station to a point where the correlation is really high again, however the amplitude of the diurnal cycle is not as high as in the measurements, corr coeff still high as it's just linear-relationship thingy
 
+
+The diurnal cycle in Barbados is the most significant difference between the ERA5 data and the measurements.
+As mentioned previously, the ERA5 grid cells near the station are predominantly oceanic.
+This means that the diurnal cycle more represents the 2-meter temperature over the ocean than the land, which does not pick up a significant temperature amplitude over the day.
+However, the model was able to reconstruct the diurnal cycle of the station to a point where the correlation coefficient is really high again, at 0.964.
+In contrast, the ERA5 data has a correlation coefficient of 0.482.
+The RMSE of the reconstructed diurnal cycle temperature is 0.55°C, while the RMSE of the ERA5 data is 2.03°C.
+This is a significant improvement, but the amplitude of the diurnal cycle is not as high as in the measurements.
+The correlation coefficient is still high, as it is a measure of the linear relationship between the two series, which is still given.
 
 \begin{figure}
     \centering
@@ -332,4 +350,42 @@ The only issue visible is that ERA5 has a slightly low bias, which the model min
 % RMSE reconstructed 0.12, RMSE ERA5 1.44, Correlation reconstructed 0.985, Correlation ERA5 0.968
 % rmse seems low but it needs to be considered that the diurnal cycle is not as pronounced in the measurements as in the other stations, hence the rmse is lower, compared to corr coeff on monthly basis of matshall and vienna, barbados is difficult...
 
-\newpage
+
+\subsubsection*{Summary}
+% Table with all the RMSE and corr coeff for ERA5 and reconstructed data on hourly, daily, diurnal and monthly basis
+
+\begin{table}
+\centering
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+\hline
+Station & Data & RMSE & RMSE ERA5 & Correlation & Correlation ERA5 \\
+\hline
+\multirow{4}{*}{Marshall} & Hourly & 2.02 & 4.56 & 0.982 & 0.965 \\
+& Daily & 1.05 & 2.02 & 0.995 & 0.982 \\
+& Diurnal & 0.48 & 3.78 & 0.991 & 0.985 \\
+& Monthly & 0.41 & 3.60 & 0.999 & 0.998 \\
+\hline
+\multirow{4}{*}{Vienna} & Hourly & 1.19 & 1.39 & 0.991 & 0.989 \\
+& Daily & 0.60 & 0.95 & 0.997 & 0.995 \\
+& Diurnal & 0.33 & 0.73 & 0.985 & 0.968 \\
+& Monthly & 0.22 & 0.56 & 1.000 & 1.000 \\
+\hline
+\multirow{4}{*}{Barbados} & Hourly & 1.43 & 2.14 & 0.666 & 0.478 \\
+& Daily & 0.65 & 1.54 & 0.786 & 0.788 \\
+& Diurnal & 0.55 & 2.03 & 0.964 & 0.482 \\
+& Monthly & 0.12 & 1.44 & 0.985 & 0.968 \\
+\hline
+\end{tabular}
+\caption{Summary of RMSE and Correlation Coefficient for ERA5 and reconstructed data}
+\label{tab:results_summary}
+\end{table}
+
+The results indicate that the CNN-based reconstruction model significantly enhances the accuracy of temperature data compared to the ERA5 reanalysis data, particularly for stations with more complex topographical contexts. The performance improvements are evident across various temporal scales, from hourly to monthly aggregations.
+
+The substantial reduction in RMSE and the high correlation coefficients across all stations suggest that the model successfully generalizes the local weather patterns. This is particularly notable for the Marshall station, where the topographical influences from the Rocky Mountains are pronounced.
+
+For the Vienna station, the limited training data posed a challenge, yet the model still managed to provide a slight improvement over the ERA5 data. This highlights the model's capability to learn effectively even from smaller datasets, although the improvements are less pronounced than in the other stations.
+
+The Barbados station results demonstrate the model's effectiveness in tropical climates, where the surrounding oceanic conditions heavily influence the local weather patterns. The model successfully differentiates between the land-based station measurements and the ocean-dominated ERA5 grid cells, significantly improving the temperature reconstructions.
+
+Overall, the model shows great potential for enhancing weather data accuracy, which can be crucial for various applications, including climate research, weather forecasting, and environmental monitoring. Future work could explore the integration of additional data sources, such as satellite observations, to further improve the model's performance. Additionally, extending the model to other weather variables and testing it in different climatic regions would provide a more comprehensive validation of its capabilities.

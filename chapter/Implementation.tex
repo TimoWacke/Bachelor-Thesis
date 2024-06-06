@@ -7,15 +7,20 @@
 
 \subsection{Introduction}
 
-Given that the machine learning part of the software is modulized as "Climate Reconstruction AI" (CRAI), the actual setup of the neural net, training and evaluation afterward is outsourced.
-Thus, the process for a single specific dataset of one station could be written pretty straightforwardly with a \code{NetCDF} file of the station data ahead if there is sufficient access to ERA5 Data.
-A Jupyter notebook could be sufficient as a way to start.
-However, once dealing with different stations, different ERA5 files need to be stored, and the files that have been prepared for submission into CRAI need to have some management and the "training-args" for CRAI need to be adapted each time.
-Thus, it appears natural to implement a set of functions and structure the process through an object-oriented approach. This allows control of different but similar pipelines with a few lines of code, either through a script, initiated by an API or in a Jupyter notebook.
-This chapter is about laying the foundation through the implementation of the different steps of the pipeline as classes and functions, while in chapter \autoref{sec: process_orchestration} the next abstraction level of the software into classes that handle the execution of the different steps and the interaction with the user through an API and a web interface is described.
-The following subsections highlight the key steps of the pipeline and how their functionality evolves.
+Given that the machine learning part of the software is modulized as "Climate Reconstruction AI" (CRAI), the neural net's setup, training and evaluation are outsourced.
+Thus, the process for a single specific dataset of one station could be written pretty straightforwardly with a \code{NetCDF} file of the station data at hand if there is sufficient access to ERA5 Data.
+A Jupyter notebook would be sufficient as a way to start.
+However, once dealing with different stations leading to different preprocessed files for numerous evaluation and training processes it becomes more complex.
+Management is needed to allow for pipelines to be run in a structured way, ensuring that the input settings for CRAI are set dynamically and that all the necessary files are created and stored in the right place.
+Thus, it appears natural to implement a set of functions and structure the process through an object-oriented approach.
+As seen in \autoref{fig: training_pipeline} and \autoref{fig: infilling_pipeline}, pipelines for training and validation have many similarities, and a lot of the implemented methods can be reused. Especially because evaluation is done in the same way for infilling using a model and the validation of a model, the difference between these two pipelines only lies in the final step of displaying the results.
+
+This chapter is about laying the foundation through the implementation of the different steps of the pipeline as classes and functions,
+while in chapter \autoref{sec: process_orchestration}, the next abstraction level of the software into classes that handle the execution of the different steps and the interaction with the user through an API and a web interface is described.
+The following subsections highlight the critical steps of the pipeline and how their functionality evolves.
+
 It does not cover the detailed embedding of the methods in their classes, nor is it explicitly mentioned where temporary folders would be created to establish a philosophy where each step of the pipeline is implemented independently and can be connected in a higher-level class.
-The methods are not necessarily designed to be used in any possible order and more in the sense of the desired pipelines, but the modularity allows for a better understanding and cleaner code, which is essential when developing another layer of abstraction later.
+The methods are not necessarily designed to be used in any possible order but in the sense of the desired pipelines. However the modularity allows for a better understanding and cleaner code, which is essential when developing another layer of abstraction later.
 
 \begin{figure}
     \centering
@@ -31,22 +36,46 @@ The methods are not necessarily designed to be used in any possible order and mo
     \label{fig: infilling_pipeline}
 \end{figure}
 
-\subsection{Stationdata Submission \& Conversion}
+\subsection{Station Data Submission \& Conversion}
 
-The station data for the 3D printed weather stations provided by NCAR comes in delimited text files, with one file per day and a text-based metadata file holding information like the station name, the latitude and longitude and the elevation.
-The data files (.dat files) hold one column per sensor and one row per minute.
+The station data for the 3D printed weather stations provided by NCAR comes in delimited text files, with one file per day, and a text-based metadata file holding information such as the station name, latitude, longitude, and elevation. 
+The data files (.dat files) contain one column per sensor and one row per minute.
 
-A class \code{DatToNcConverter} is implemented with the following main use cases:
-First take in a directory with the .dat files and the metadata file and parse it. Second, to process the data including dropping missing values as well as resampling to an hourly frequency, and converting from Celcius to Kelvin to match ERA5. This is easiest in a pandas dataframe. Third to convert the data to a \code{NetCDF} file, which is the format that is used by the ERA5 data and the CRAI module. The \code{NetCDF} file is structured in a way that the data is stored in a 3D array with the dimensions time, latitude and longitude. The metadata is stored as global attributes in the \code{NetCDF} file. Fourth, convert some dataframe back to a .dat file after the reconstruction of measurements to match the original format when infilling. Of these use cases, the one resampling to hourly frequency is the most complex, or at least could include many design decisions. Missing values are marked with \code{-999.99}, so in the first step, these values can be marked as \code{NaN}. However, the data quality is by default not controlled, and there could be values that should be marked as missing but are not. Thus, the NCAR consulted to mark "0.00" °C as \code{NaN}. For stations like Barbados this wouldn't be a realistic value anyway, but even for regions where 0°C degrees are reached often, it is unlikely to measure exactly "0.00", meaning the amount of correct data lost through marking "0.00" as \code{NaN} is still limited. Also, by agreement with the NCAR, everything above or under +/- 45°C is marked as \code{NaN}. Additionally, to compensate for peaks in the data aggregating the minutes using a median instead of a mean can be a good idea, \code{numpy.median()} would return \code{NaN} if any value is \code{NaN} and \code{numpy.nanmedian()} would ignore \code{NaN}s. It would be best to have a custom aggregate function using \code{numpy.nanmedian()} but assuring prior to that that there are sufficient non-\code{NaN} values.
+A class \code{DatToNcConverter} is implemented with the following functionalities:
 
-For the usecase of converting the data back to a .dat file, the dataframe is stored directly in the converter object as original dataframe after detecting \code{NaN}s and resampling to hourly values, before any transformation of units (Celcius to Kelvin) or renaming of columns takes place and before \code{NaN}s are dropped. Fundamentally in between the first and last measurements rows for all minutes exist, even if measurements are missing. However if the station had severe issues it is possible that between first and last record there are even rows or files missing. To assure that the original dataframe will have rows for all hours, a handy method provided by the python pandas module is used:
+First, it takes the \code{.dat} files and the metadata file into a directory and parses them. 
+Second, the data is processed, including dropping missing values, resampling to an hourly frequency, and converting from Celsius to Kelvin to match ERA5. 
+This is easiest in a pandas dataframe. 
+Third, it converts the data to a \code{NetCDF} file, which is the format used by the ERA5 data and the CRAI module. 
+The \code{NetCDF} file is structured in a way that stores the data in a 3D array with the dimensions time, latitude, and longitude. 
+The metadata is stored as global attributes in the \code{NetCDF} file. 
+Fourth, it converts some dataframes back to \code{.dat} files after the reconstruction of measurements to match the original format when infilling.
+
+The resampling to hourly frequency is the most complex use case, as it includes many design decisions. 
+Missing values are marked with \code{-999.99}, so in the first step, these values are marked as \code{NaN}. 
+However, the data quality is not controlled by default, and there could be values that should be marked as missing but are not. 
+Thus, the NCAR consulted to mark \code{0.00} °C as \code{NaN}. 
+For stations like Barbados, this wouldn't be a realistic value, but even for regions where 0°C degrees are reached often, it is unlikely to measure exactly \code{0.00}, meaning the amount of correct data lost through marking \code{0.00} as \code{NaN} is limited. 
+Additionally, by agreement with the NCAR, everything above or under \code{± 45°C} is marked as \code{NaN}. 
+To compensate for peaks in the data, aggregating the minutes using a median instead of a mean is a good idea; \code{numpy.median()} would return \code{NaN} if any value is \code{NaN}, while \code{numpy.nanmedian()} would ignore \code{NaN}s. 
+It is best to have a custom aggregate function using \code{numpy.nanmedian()}.
+
+For the use case of converting the data back to a \code{.dat} file, the dataframe is stored directly in the converter object as the original dataframe. Only the detection of \code{NaN}s and the aggregation to hourly values are done before, as the use case lies in the infilling task, and the reconstruction gives hourly values.
+After saving the original state, any transformation of units (Celsius to Kelvin), renaming of columns and most importantly, the actual clearing of the \code{NaN}s take place.
+Fundamentally, in between the first and last measurements, rows exist for all minutes, even if measurements are missing.
+However, if the station had severe issues, it is possible that between the first and last record, there are even rows or files missing.
+To assure that the original dataframe, where the NaNs are not supposed to be cleared, will have rows for all hours, a handy method provided by the Python pandas module is used:
 
 \begin{lstlisting}
     self.original_df = self.original_df.reindex(
         pd.date_range(start = self.dataframe.index.min(), end = self.dataframe.index.max(), freq = "h"))
 \end{lstlisting}
 
-A class \code{Station} is implemented to hold the metadata and the pandas dataframe of the station data. It holds the converter itself, to minimize lines of code in the main script. The class is mainly used to manage the access to the different files and data, before and after the conversion. And secondly to detect the gaps in the data, for infilling simply in the form of listing the hours where data is missing. And for training use cases additionally in form of listing the months where at least some data is available which is most convenient for the API applicance to get ERA5 data for the station.
+A class \code{Station} is implemented to hold the metadata and the pandas dataframe of the station data.
+It holds the converter itself, to minimize lines of code in the main script.
+The class is mainly used to manage the access to the different files and data, before and after the conversion.
+And secondly to detect the gaps in the data, for infilling simply in the form of listing the hours where data is missing.
+And for training use cases additionally in form of listing the months where at least some data is available which is most convenient for the API applicance to get ERA5 data for the station.
 
 
 \begin{lstlisting}[caption=Gap Detection in Station Class, label=lst:find_gaps]
@@ -170,16 +199,19 @@ For evaluating the model, in a validation procedure the same preparation of ERA5
 
 When evaluating the model not for validation but to infill missing values, the ERA5 data needs to be prepared differently of course. Instead of requesting monthly data from the cdsapi, it is requesting only the missing hours day by day, such that the time-dimesion is directly as desired, and preprocessing only needs to handle the conversion and geographical cropping.
 
-\subsection{Output of the model}
+\subsection{Evaluation}
 
-Because CRAI is using the encode, decode architecture with connected layers as described in \autoref{subsec:cnn}, the output file in \code{NetCDF} format that the model produces includes not only one temperature value per timestep but has the same dimensions as the input ERA5 file meaning it uses the same 8x8 grid with 64 temperature values. However since it has been trained on input files where the ground truth was also laid on the 8x8 grid, the 64 temperature values in the output data of the model tend to be extremely similar. They need to be reshaped however to the original dimensions of the station data, which is a 1D array with 1 temperature value per timestep. This is done by taking the mean of the 64 values. 
+Because CRAI is using the encode, decode architecture with connected layers as described in \autoref{subsec:cnn}, the output file in \code{NetCDF} format that the model produces includes not only one temperature value per timestep but has the same dimensions as the input ERA5 file meaning it uses the same 8x8 grid with 64 temperature values. However since it has been trained on input files where the ground truth was also laid on the 8x8 grid, the 64 temperature values in the output data of the model tend to be extremely similar.
+As a standard to compare the the groud truth with the reconstruction and the ERA5 data as in \autoref{sec: results}, a method is implemented that takes in a file for each data. The output file of the model and the ERA5 file for the model have the same spatial dimensions spanning over the 64 coordinates. The file for the measurements is the one created by \code{DatToNcConverter} which is different to the 
 
-\subsection{Plotting for validation}
+To efficiently make this transformation and establish a standard again a method is implemented, that takes in the output file of the model and the training dataset file with the measurements and creates a  
+
+To efficiently make 
 
 % def era5_vs_reconstructed_comparision_to_df(era5_path, reconstructed_path, measurements_path):
 
 
 % def plot_n_steps_of_df(df, coords, as_delta, n=None, title=None, save_to=False):
 
-\subsection{Infilling for reconstruction}
+ % \subsection{Infilling for reconstruction}
 

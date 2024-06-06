@@ -105,12 +105,16 @@ keepaspectratio]{resources/images/deckblatt.png}%
 }
 
 \newcommand{\subsubsubsection}[1]{\paragraph{#1}\mbox{}\\}
+\newcommand{\source}[1]{\caption*{Source: {#1}} }
+
+
 \setcounter{secnumdepth}{4}
 \setcounter{tocdepth}{4}
 \begin{document}
 
 % Entfernen der Seitenzahlen und BackroundPic als Hintergrund nutzen
 \pagenumbering{gobble}
+\counterwithin{figure}{section}
 \AddToShipoutPicture{\BackgroundPic}
 
 % Titelblatt erzeugen

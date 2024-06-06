@@ -2,7 +2,7 @@
 \section{Results}
 \label{sec: results}
 
-\subsection{Included Weather Stations}
+\subsection{Stations included in this study}
 
 From the 3D-Paws project (see \autoref{sec: 3d_printed_stations}), measurements from three different weather stations in recent years were obtained. The stations are located in Marshall, Colorado; Vienna, Austria; and Barbados, Caribbean.
 
@@ -192,7 +192,7 @@ The correlation coefficient is a measure of how well the model output follows th
 % RMSE reconstructed: 2.02, RMSE ERA5: 4.56, Correlation reconstructed: 0.982, Correlation ERA5: 0.965
 % ERA5 has a low bias
 
-To begin with Marshall, the occasion with the most available training data, all by the model predicted temperatures for the hourly measurements of the validation dataset have been plotted in \autoref{fig: marshall_diff} with a blue line against the ground truth in black.
+Beginning with Marshall, where the most abundant training data is available, the model's predicted temperatures for the hourly measurements of the validation dataset are depicted in \autoref{fig: marshall_diff} by a blue line against the ground truth in black.
 Given the high number of hourly timesteps along the x-axis spanning the year 2021, for the sake of readability, the temperature differentials are plotted on the y-axis instead of the absolute temperatures.
 Above the chart, the RMSE and correlation coefficient of the reconstructed series are provided for the corresponding data.
 The RMSE for the Marshall station is 2.02°C, which is the highest value among the three weather stations.
@@ -261,7 +261,7 @@ The chart is chosen to be representative, while some weeks have a better fitting
 % RMSE reconstructed: 1.19, RMSE ERA5: 1.39, Correlation reconstructed: 0.991, Correlation ERA5: 0.989
 
 Similar to the Marshall station, the plots for the Vienna station follow the same structure.
-Again, a plot over the full validation period on an hourly basis (\autoref{fig: vienna_diff}), daily (\autoref{fig: vienna_daily}) and monthly (\autoref{fig: vienna_monthly}) aggregated ones and the diurnal cycle (\autoref{fig: vienna_diurnal}) as well as an extract of a week (\autoref{fig: fig: vienna_7day}), are shown.
+Again, a plot over the full validation period on an hourly basis (\autoref{fig: vienna_diff}), daily (\autoref{fig: vienna_daily}) and monthly (\autoref{fig: vienna_monthly}) aggregated ones and the diurnal cycle (\autoref{fig: vienna_diurnal}) as well as an extract of a week (\autoref{fig: vienna_7day}), are shown.
 However, a significant difference is that the station's available data in Vienna was so limited that only half a year was included in the validation data.
 Also, to put the validation of the reconstruction in perspective, it needs to be considered that the RMSE and correlation coefficient, in relation to the ERA5 data in Vienna, are by far the best among the three stations.
 1.19°C RMSE and 0.991 correlation coefficient for the reconstructed temperature compared to 1.39°C RMSE and 0.989 correlation coefficient for the ERA5 data at the nearest grid point.
@@ -397,10 +397,7 @@ Station & Data & RMSE & RMSE ERA5 & Correlation & Correlation ERA5 \\
 \label{tab:results_summary}
 \end{table}
 
-The results indicate that the CNN-based reconstruction model significantly enhances the accuracy of temperature data compared to the ERA5 reanalysis data, particularly for stations with more complex topographical contexts. The performance improvements are evident across various temporal scales, from hourly to monthly aggregations.
-
-The substantial reduction in RMSE and the high correlation coefficients across all stations suggest that the model successfully generalizes the local weather patterns. This is particularly notable for the Marshall station, where the topographical influences from the Rocky Mountains are pronounced.
-
-For the Vienna station, the limited training data posed a challenge, yet the model still managed to provide a slight improvement over the ERA5 data. This highlights the model's capability to learn effectively even from smaller datasets, although the improvements are less pronounced than in the other stations.
-
-The Barbados station results demonstrate the model's effectiveness in tropical climates, where the surrounding oceanic conditions heavily influence the local weather patterns. The model successfully differentiates between the land-based station measurements and the ocean-dominated ERA5 grid cells, significantly improving the temperature reconstructions.
+The results indicate that the CNN-based model significantly improves the accuracy of temperature data reconstruction compared to the ERA5 reanalysis dataset. This improvement is particularly notable for stations located in complex topographical areas.
+The model demonstrates its ability to generalize local weather patterns effectively, as evidenced by the substantial reduction in RMSE and high correlation coefficients across all stations. The Marshall station, situated in the Rocky Mountains region, showcases the model's capability to capture intricate topographical influences.
+While the Vienna station had limited training data, the model still managed to slightly outperform the ERA5 data, highlighting its ability to learn from smaller datasets, albeit with less pronounced improvements.
+For the Barbados station, the model excelled in reconstructing the diurnal cycle, which, due to the oceanic grid cells, was not clearly represented in the ERA5 data that it took as input.

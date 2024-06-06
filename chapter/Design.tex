@@ -49,6 +49,7 @@ Until the model is trained, only the dataset with all the hours marked as presen
 
 As a result, we have a dataset pair of weather station measurements and ERA5 data, that are coherent in time and space.
 
+\subsection{Training of the Convolutional Neural Network}
 To determine after the training if and to which extent the model learned to reconstruct the missing data, the dataset pair is split again along the time axis into a pair of station with ERA5 data for training and a pair of station with ERA5 data for validation.
 Thus we can later let the model reconstruct values that have actually been measured but haven't been included in the training so we then can validate how successful the reconstruction is.
 With the datasets prepared, the next phase involves configuring and training the Convolutional Neural Network (CNN) for the temperature reconstruction task.
@@ -56,7 +57,7 @@ The CNN architecture is tailored to accept input in the form of 8x8 grid cells c
 Employing a supervised learning approach, the CNN is trained using pairs of hourly temperature data from the weather station and corresponding grid cell data from ERA5.
 The training process iteratively feeds batches of data into the CNN, fine-tuning its parameters to minimize prediction errors and optimize accuracy in reconstructing missing temperature values.
 
-\subsection{Model Evaluation}
+\subsection{Validation of the trained model}
 Following the training phase, the CNN's performance is evaluated using the validation set.
 The model's capacity to accurately reconstruct missing temperature data at the weather station is scrutinized against ground truth values.
 This evaluation step serves to gauge the CNN's proficiency in capturing intricate weather patterns and producing precise temperature estimations.
@@ -64,7 +65,7 @@ For that, the root mean squared error (RMSE) and the correlation coefficient are
 The RMSE is a measure of the differences between predicted and observed values, while the correlation coefficient quantifies the strength and direction of the linear relationship between the two datasets.
 An obvious choice as a time range for the evaluation would be to cut out one complete year so that the model can be evaluated over the full range of seasons and weather conditions.
 
-\subsection{Application to New Data}
+\subsection{Application for infilling}
 Upon successful training and validation, the model is trained again with the measurements that have been excluded before for the benefit of validation.
 After training on the complete data, the CNN can be used to fill gaps.
 Fundamentally, the predictions can be made for any list of timesteps. Firstly, the needed ERA5 data, for the respective timesteps will be obtained, and secondly cropped in the same way to the geographical region as during training and then given as input to the model.

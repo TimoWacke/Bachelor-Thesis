@@ -72,10 +72,10 @@ To assure that the original dataframe, where the NaNs are not supposed to be cle
 \end{lstlisting}
 
 A class \code{Station} is implemented to hold the metadata and the pandas dataframe of the station data.
-It holds the converter itself, to minimize lines of code in the main script.
-The class is mainly used to manage the access to the different files and data, before and after the conversion.
-And secondly to detect the gaps in the data, for infilling simply in the form of listing the hours where data is missing.
-And for training use cases additionally in form of listing the months where at least some data is available which is most convenient for the API applicance to get ERA5 data for the station.
+It includes the converter itself, minimizing lines of code in the main script.
+The class primarily manages access to the different files and data, both before and after the conversion.
+Additionally, it detects gaps in the data, providing a simple list of hours where data is missing for infilling purposes.
+For training use cases, it also lists the months where at least some data is available, which is convenient when using the API to obtain ERA5 data for the station.
 
 
 \begin{lstlisting}[caption=Gap Detection in Station Class, label=lst:find_gaps]

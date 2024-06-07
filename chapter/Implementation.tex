@@ -213,7 +213,6 @@ When evaluating the model not for validation but to infill missing values, the E
 Instead of requesting monthly data from the \code{cdsapi}, it is requesting only the missing hours day by day, such that the time-dimension is directly as desired, and preprocessing only needs to handle the conversion and geographical cropping.
 
 \subsection{Handling the Model Output}
-
 Because CRAI is using the encode, decode architecture as described in \autoref{subsec: cnn}, the output file in \code{NetCDF} format that the model produces includes not only one temperature value per timestep but has the same dimensions as the input ERA5 file meaning it uses the same 8x8 grid with 64 temperature values.
 However, since it was trained on input files where the ground truth was also laid on the 8x8 grid, the 64 temperature values in the output data of the model tend to be highly similar.
 To make this transformation but primarily for practical reasons, the output file will be converted to a pandas dataframe again, where the calculated mean of the 64 values is stored.

@@ -9,19 +9,19 @@ Despite limitations in training data availability, the models successfully corre
 Notably, the model trained for the weather station in Barbados displayed promising capabilities in reconstructing the diurnal cycle, a feature not adequately represented in the ERA5 data despite being trained on only two years of data.
 
 Looking forward to future research, various extensions for improvement and application can be explored.
-One potential area is the incorporation of additional sensors.
-By integrating supplementary sensors, such as those for measuring solar radiation that the 3D-printed weather stations are equipped with, the quality of reconstruction could be enriched.
-This enhancement can be applied in two different stages.
-Firstly, the additional data could be used in training, such that the model takes not only the ERA5 temperature as input but also the solar radiation in this example.
-Secondly, there could be potential for a system that can benefit from other available sensor data during reconstruction as well. 
+One potential area is the incorporation of additional climate variables.
+The weather stations of the 3D-PAWS network, for example, are equipped with a solar-radiation sensor. If only the temperature data is missing, the model could be trained to take besides the ERA5 temperature data, the solar radiation data as input. 
 
-Towards the application of this approach, the thesis has developed an end-to-end software solution accompanied by a user-friendly web interface.
+Although reconstruction is the pillar of this research, the ultimate goal is to divulge outstanding results to weather station operators, such as the 3D-PAWS team.
+The thesis has developed an end-to-end software solution accompanied by a user-friendly web interface.
 This interface enables the reconstruction of temperature data at any weather station globally without requiring extensive computer science knowledge.
 It is crucial to note that the model's performance relies significantly on the quality and quantity of training data.
 Hence, the software provides a platform for users to train and validate the model with their own data, accessible not only through the web interface but also automatically via the provided API.
 Additionally, users can utilize the model's reconstruction results to assist in error-checking datasets by comparing them with actual measurements.
 Subsequently, on the cleansed dataset, the model can be retrained, leading to improved accuracy.
 The modularized design of the software allows for adjustments and extensions, such as incorporating different Reanalysis data sources.
-If another reanalysis dataset is more accurate for a specific region, the software can be configured to utilize this dataset instead of ERA5, with the models subsequently retrained on the new data.
+Suppose another reanalysis dataset is more accurate for a specific region. In that case, the software can be configured to utilize this dataset instead of ERA5, with the models subsequently retrained on the new data.
 Furthermore, it can be explored how the model can be applied to existing weather forecast data, such as that from the European Centre for Medium-Range Weather Forecasts (ECMWF) or the National Oceanic and Atmospheric Administration (NOAA).
 This could be a promising approach to improve the local forecast quality, as the model represents knowledge of the local weather patterns.
+
+In conclusion, the research presented in this thesis has demonstrated the potential of machine learning in reconstructing temperature data at weather stations in a computationally efficient and universally applicable manner.

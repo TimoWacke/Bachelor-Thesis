@@ -1,0 +1,28 @@
+\section{Conclusion}
+\label{sec: conclusion}
+
+This thesis employed a machine-learning technique to reconstruct temperature data at weather stations, offering a computationally lightweight alternative to Numerical Weather Prediction (NWP).
+The approach was specifically designed to utilize only the ERA5 reanalysis data as input, making it universally applicable to any weather station worldwide.
+Trained models for each station, based on convolution layers, effectively identified local patterns in the ERA5 data, resulting in more accurate temperature predictions compared to the ERA5 data itself.
+Upon validation against test data, the models consistently outperformed the ERA5 data, showcasing varying levels of accuracy across different datasets.
+Despite limitations in training data availability, the models successfully corrected both major and minor biases present in the ERA5 data. However, the correlation coefficient wise performance was more closely tied to the quantity of training data.
+Notably, the model trained for the weather station in Barbados displayed promising capabilities in reconstructing the diurnal cycle, a feature not adequately represented in the ERA5 data despite being trained on only two years of data.
+
+Looking forward to future research, various extentions for improvement and application can be explored.
+One potential area is the incorporation of additional sensors.
+By integrating supplementary sensors, such as those for measuring solar radiation that the 3D printed weather stations are equipped with, the quality of reconstruction could be enriched.
+This enhancement can be applied in two different stages.
+Firstly, the additional data could be used in training, such that the model takes not only the ERA5 temperature as input but also the solar radiation in this example.
+Secondly, there could be potential for a system that can benefit from other available sensor data during reconstruction as well. 
+
+Towards the application of this approach, the thesis developed an end-to-end software solution that comes with a user-friendly web interface.
+This, allows for the reconstruction of temperature data at any weather station globally without the need for extensive computer science knowledge.
+It is crucial to note that the model's performance is highly dependent on the quality and quantity of training data.
+Therefore, the software provides a platform for users to train and validate the model with their own data, not only through the web interface but if needed also automatically through the provided API.
+One could also use the models reconstruction results as a helping hand when checking a dataset for errors, as the user could compare the model's reconstruction with the actual measurements.
+On the then cleansed dataset, the model could be trained again, leading to a more accurate model.
+
+The modularized design of the software allows for adjustments and extensions, such as a different Reanalysis data source.
+When for a specific region, another reanalysis dataset is more accurate, the software can be adjusted to use this dataset instead of ERA5 and the models can be retrained on this new data.
+Furthermore, it can be explored how the model can be applied to existing weather forecast data. For example, the European Centre for Medium-Range Weather Forecasts (ECMWF) or the National Oceanic and Atmospheric Administration (NOAA).
+This could be a promising approach to improve the local forecast quality, as the model represents knowledge of the local weather patterns.

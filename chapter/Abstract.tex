@@ -1,5 +1,14 @@
 \section*{Abstract}
 \label{sec: abstract}
 
+This bachelor thesis presents a method to reconstruct missing temperature measurements from low-cost weather stations using ERA5 Reanalysis data and a Convolutional Neural Network (CNN).
+The work aims to address challenges posed by sparse weather station coverage by supporting low-cost stations with gap-filling.
+The proposed method involves training a CNN model to estimate the weather stations hourly measurements based on the surrounding 8x8 grid data from the ERA5 Reanalysis.
+The trained model can then reconstruct missing station data, outperforming traditional numerical methods in computational efficiency.
+The thesis describes the conceptual framework, including data acquisition, preprocessing, CNN training, model validation using metrics like RMSE and correlation coefficient, and application for filling missing data.
+It provides background on CNNs and atmospheric reanalysis.
+The results evaluate the models' performance across stations in different environments.
+The implementation covers the pipeline for training models, reconstructing data, data handling, interfacing with the Copernicus API, and preprocessing steps.
+It also discusses process orchestration with a web interface and API for training, infilling, and validation.
 
 \section*{Zusammenfassung}

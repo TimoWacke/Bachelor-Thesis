@@ -122,8 +122,10 @@ keepaspectratio]{resources/images/deckblatt.png}%
 \newpage
 
 % Eidesstattliche Erklärung erzeugen
-\makeeidesstatt
-\thispagestyle{empty}
+\AtEndDocument{
+  \thispagestyle{empty}
+  \makeeidesstatt
+}
 
 % Abstract und Inhaltsverzeichnisse einfügen (Numerierung römisch ab Inhaltsverzeichnis)
 \input{chapter/Abstract.tex}

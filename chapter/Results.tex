@@ -11,27 +11,27 @@ From the 3D-Paws project (see \autoref{sec: 3d_printed_stations}), measurements 
 \centering
 \begin{subfigure}{0.672\textwidth}
 \includegraphics[width=\textwidth]{resources/images/charts/marshall_available_measurements.png}
-\caption{Station in Marshall, Colorado, USA}
+\caption{Station in Marshall, Colorado, USA.}
 \label{fig: available_measurements_marshall}
 \end{subfigure}
 \begin{subfigure}{0.672\textwidth}
 \includegraphics[width=\textwidth]{resources/images/charts/vienna_available_measurements.png}
-\caption{Station in Vienna, Austria}
+\caption{Station in Vienna, Austria.}
 \label{fig: available_measurements_vienna}
 \end{subfigure}
 \begin{subfigure}{0.672\textwidth}
 \includegraphics[width=\textwidth]{resources/images/charts/barbados_available_measurements.png}
-\caption{Station in Barbados, Caribbean}
+\caption{Station in Barbados, Caribbean.}
 \label{fig: available_measurements_barbados}
 \end{subfigure}
-\caption{Available data from 3D-printed Weather stations}
+\caption{Available data from 3D-printed Weather stations.}
 \label{fig: weather_stations}
 \end{figure}
 
 \begin{wrapfigure}[15]{r}{0.40\textwidth}
 \centering
 \includegraphics[width=0.38\textwidth]{resources/images/Marshall_era5.png}
-\caption{ERA5 Area of the station in Marshall, Colorado}
+\caption{ERA5 Area of the station in Marshall, Colorado.}
 \label{fig: era5_marshall}
 \end{wrapfigure}
 
@@ -90,7 +90,7 @@ Barbados & 17,315 & 14,576 & 2,739 & 0.16 \\
 Vienna & 12,477 & 9,593 & 2,884 & 0.23 \\
 \hline
 \end{tabular}
-\caption{Data availability and split into training and validation data}
+\caption{Data availability and split into training and validation data.}
 \label{tab:data_split}
 \end{table}
 
@@ -101,7 +101,7 @@ The 8x8 grid cells were chosen to be centered as well as possible around each we
 The ERA5 data was also preprocessed using the code pipeline described in \autoref{sec: implementation}.
 Then, the CNN with the architecture described in \autoref{subsec: cnn} was trained on the training data.
 The training was done in batches of 4 data points, which are, in this case, four hourly steps at a time.
-The model was trained for up to 300,000 iterations, which, therefore, depend on the dataset size between 8 and 31 epochs. The training was done on the Supercomputer Levante of the German Climate Computing Center, which made it possible to complete training runs in just a few hours.
+The model was trained for up to 300,000 iterations, which, therefore, depend on the dataset size between 8 and 31 epochs. The training was done on the Supercomputer Levante of the German Climate Computing Center (DKRZ), which made it possible to complete training runs in just a few hours.
 However, the training can be done in the same way on almost any machine.
 During the training, in the scientific process, where the approach is un-proven to work, it is crucial to validate multiple times during the training to calculate not only the loss function over the model for the training data, but over the validation data.
 This is done to prevent overfitting, a so-called phenomenon where the model in the aim to minimize the loss for the training data, which is what training using backpropagation is exactly at it is core, starts to learn the noise and any potential specifics of the training data so well, that it loses it is ability to generalize and the loss for the validation data starts to increase.
@@ -120,20 +120,35 @@ Notably, high correlation can coexist with significant distance between series.
 
 \begin{figure}
     \centering
-    \begin{subfigure}{0.35\textwidth}
+    \begin{subfigure}{0.3\textwidth}
+        \centering
+        \includegraphics[width=0.7\textwidth]{resources/images/high_rmse_low_corr.png}
+        \caption{High RMSE, low CC.}
+        \label{fig: high_rmse_low_corr}
+    \end{subfigure}
+    \hspace{1.5cm}
+    \begin{subfigure}{0.3\textwidth}
         \centering
         \includegraphics[width=0.7\textwidth]{resources/images/low_rmse.png}
-        \caption{Low RMSE, low Correlation Coefficient}
+        \caption{Low RMSE, low CC.}
         \label{fig: low_rmse}
     \end{subfigure}
-    \hspace{0.5cm}
-    \begin{subfigure}{0.35\textwidth}
+    \begin{subfigure}{0.3\textwidth}
+        \vspace{1cm}
         \centering
         \includegraphics[width=0.7\textwidth]{resources/images/high_corr.png}
-        \caption{High Correlation Coefficient, high RMSE}
+        \caption{High RMSE, high CC.}
         \label{fig: high_corr}
     \end{subfigure}
-    \caption{Comparison of the RMSE and Correlation Coefficient}
+    \hspace{1.5cm}
+    \begin{subfigure}{0.3\textwidth}
+        \vspace{1cm}
+        \centering
+        \includegraphics[width=0.7\textwidth]{resources/images/low_rmse_high_corr.png}
+        \caption{Low RMSE, high CC.}
+        \label{fig: low_rmse_high_corr}
+    \end{subfigure}
+    \caption{Comparison of the RMSE and Correlation Coefficient (CC).}
 \end{figure}
 
 \subsubsection*{Root Mean Squared Error (RMSE)}
@@ -187,7 +202,7 @@ The correlation coefficient is a measure of how well the model output follows th
 \begin{figure}
     \centering
     \includegraphics[width=1.00\textwidth]{resources/images/charts/marshall_eval_grib_final/Marshall, Difference to Measurements.png}
-    \caption{Difference between reconstructed and measured hourly temperature for Marshall station}
+    \caption{Difference between reconstructed and measured hourly temperature for Marshall station.}
     \label{fig: marshall_diff}
 \end{figure}
 % RMSE reconstructed: 2.02, RMSE ERA5: 4.56, Correlation reconstructed: 0.982, Correlation ERA5: 0.965
@@ -208,7 +223,7 @@ The calculated correlation coefficient over the validation year 2021 on an hourl
 \begin{figure}
     \centering
     \includegraphics[width=1.00\textwidth]{resources/images/charts/marshall_eval_grib_final/Marshall - Daily mean.png}
-    \caption{Reconstructed temperature vs measured temperature for Marshall station (Daily mean)}
+    \caption{Reconstructed temperature vs measured temperature for Marshall station (Daily mean).}
     \label{fig: marshall_daily}
 \end{figure}
 % RMSE reconstructed: 1.05, RMSE ERA5: 2.02, Correlation reconstructed: 0.995, Correlation ERA5: 0.982
@@ -222,7 +237,7 @@ The RMSE on a daily basis for the prediction is almost halved the original one a
 \begin{figure}
     \centering
     \includegraphics[width=1.00\textwidth]{resources/images/charts/marshall_eval_grib_final/Marshall, Average Diurnal Cycle.png}
-    \caption{Reconstructed temperature vs. measured temperature for Marshall station (Average Diurnal Cycle)}
+    \caption{Reconstructed temperature vs. measured temperature for Marshall station (Average Diurnal Cycle).}
     \label{fig: marshall_diurnal}
 \end{figure}
 % RMSE reconstructed 0.48, RMSE ERA5 3.78, Correlation reconstructed 0.991, Correlation ERA5 0.985
@@ -240,14 +255,14 @@ The chart is chosen to be representative, while some weeks have a better fitting
 \begin{figure}
     \centering
     \includegraphics[width=1.00\textwidth]{resources/images/charts/marshall_eval_grib_final/Marshall, 7 Day Period_1_2_3.png}
-    \caption{Reconstructed temperature vs. measured hourly temperature for Marshall station (7 Day Period)}
+    \caption{Reconstructed temperature vs. measured hourly temperature for Marshall station (7 Day Period).}
     \label{fig: marshall_7day}
 \end{figure}
 
 \begin{figure}
     \centering
     \includegraphics[width=1.00\textwidth]{resources/images/charts/marshall_eval_grib_final/Marshall - Monthly mean.png}
-    \caption{Reconstructed temperature vs. measured temperature for Marshall station (Monthly mean)}
+    \caption{Reconstructed temperature vs. measured temperature for Marshall station (Monthly mean).}
 \end{figure}
 % RMSE reconstructed 0.41, RMSE ERA5 3.60, Correlation reconstructed 0.999, Correlation ERA5 0.998
 % super good result but of course monthly means...
@@ -256,7 +271,7 @@ The chart is chosen to be representative, while some weeks have a better fitting
 \begin{figure}[H]
 \centering
 \includegraphics[width=1.00\textwidth]{resources/images/charts/vienna_eval_grib_final/Vienna, Difference to Measurements.png}
-\caption{Difference between reconstructed and measured hourly temperature for Vienna station}
+\caption{Difference between reconstructed and measured hourly temperature for Vienna station.}
 \label{fig: vienna_diff}
 \end{figure}
 % RMSE reconstructed: 1.19, RMSE ERA5: 1.39, Correlation reconstructed: 0.991, Correlation ERA5: 0.989
@@ -272,7 +287,7 @@ This minor improvement can be attributed to the limited training data but also t
 \begin{figure}
 \centering
 \includegraphics[width=1.00\textwidth]{resources/images/charts/vienna_eval_grib_final/Vienna - Daily mean.png}
-\caption{Reconstructed temperature for Vienna station (Daily mean)}
+\caption{Reconstructed temperature for Vienna station (Daily mean).}
 \label{fig: vienna_daily}
 \end{figure}
 % RMSE reconstructed: 0.60, RMSE ERA5: 0.95, Correlation reconstructed: 0.997, Correlation ERA5: 0.995
@@ -285,7 +300,7 @@ However, the RMSE at 0.60°C is, by a relative measure, significantly lower than
 \begin{figure}
 \centering
 \includegraphics[width=1.00\textwidth]{resources/images/charts/vienna_eval_grib_final/Vienna, Average Diurnal Cycle.png}
-\caption{Measured temperature for Vienna station (Average Diurnal Cycle)}
+\caption{Measured temperature for Vienna station (Average Diurnal Cycle).}
 \label{fig: vienna_diurnal}
 \end{figure}
 % RMSE reconstructed 0.33, RMSE ERA5 0.73, Correlation reconstructed 0.985, Correlation ERA5 0.968
@@ -298,14 +313,14 @@ The model was able to correct this time shift, leading to this excellent RMSE an
 \begin{figure}
 \centering
 \includegraphics[width=1.00\textwidth]{resources/images/charts/vienna_eval_grib_final/Vienna, 7 Day Period_1_2_3.png}
-\caption{Reconstructed temperature vs. measured hourly temperature for Vienna station (7 Day Period)}
+\caption{Reconstructed temperature vs. measured hourly temperature for Vienna station (7 Day Period).}
 \label{fig: vienna_7day}
 \end{figure}
 
 \begin{figure}
 \centering
 \includegraphics[width=1.00\textwidth]{resources/images/charts/vienna_eval_grib_final/Vienna - Monthly mean.png}
-\caption{Reconstructed temperature vs. measured temperature for Vienna station (Monthly mean)}
+\caption{Reconstructed temperature vs. measured temperature for Vienna station (Monthly mean).}
 \label{fig: vienna_monthly}
 \end{figure}
 % RMSE reconstructed 0.22, RMSE ERA5 0.56, Correlation reconstructed 1.000, Correlation ERA5 1.000
@@ -318,7 +333,7 @@ The only issue visible is that ERA5 has a slightly low bias, which the model min
 \begin{figure}
     \centering
     \includegraphics[width=1.00\textwidth]{resources/images/charts/barbados_eval_grib_final/Barbados, Difference to Measurements.png}
-    \caption{Difference between reconstructed and measured hourly temperature for Barbados station}
+    \caption{Difference between reconstructed and measured hourly temperature for Barbados station.}
     \label{fig: barbados_diff}
 \end{figure}
 % RMSE reconstructed: 1.43, RMSE ERA5: 2.14, Correlation reconstructed: 0.666, Correlation ERA5: 0.478
@@ -331,7 +346,7 @@ The ERA5 data had a very low correlation coefficient of 0.478, which is by far t
 \begin{figure}
     \centering
     \includegraphics[width=1.00\textwidth]{resources/images/charts/barbados_eval_grib_final/Barbados - Daily mean.png}
-    \caption{Reconstructed temperature for Barbados station (Daily mean)}
+    \caption{Reconstructed temperature for Barbados station (Daily mean).}
     \label{fig: barbados_daily}
 \end{figure}
 % RMSE reconstructed: 0.65, RMSE ERA5: 1.54, Correlation reconstructed: 0.786, Correlation ERA5: 0.788
@@ -342,7 +357,7 @@ In \autoref{fig: barbados_daily}, the daily mean temperature is plotted for the 
 \begin{figure}
     \centering
     \includegraphics[width=1.00\textwidth]{resources/images/charts/barbados_eval_grib_final/Barbados, Average Diurnal Cycle.png}
-    \caption{Measured temperature for Barbados station (Average Diurnal Cycle)}
+    \caption{Measured temperature for Barbados station (Average Diurnal Cycle).}
     \label{fig: barbados_diurnal}
 \end{figure}
 % RMSE reconstructed 0.55, RMSE ERA5 2.03, Correlation reconstructed 0.964, Correlation ERA5 0.482
@@ -359,13 +374,13 @@ The correlation coefficient is still high, as it is a measure of the linear rela
 \begin{figure}
     \centering
     \includegraphics[width=1.00\textwidth]{resources/images/charts/barbados_eval_grib_final/Barbados, 7 Day Period_1_2.png}
-    \caption{Reconstructed temperature vs. measured hourly temperature for Barbados station (7 Day Period)}
+    \caption{Reconstructed temperature vs. measured hourly temperature for Barbados station (7 Day Period).}
 \end{figure}
 
 \begin{figure}
     \centering
     \includegraphics[width=1.00\textwidth]{resources/images/charts/barbados_eval_grib_final/Barbados - Monthly mean.png}
-    \caption{Reconstructed temperature vs. measured temperature for Barbados station (Monthly mean)}
+    \caption{Reconstructed temperature vs. measured temperature for Barbados station (Monthly mean).}
 \end{figure}
 % RMSE reconstructed 0.12, RMSE ERA5 1.44, Correlation reconstructed 0.985, Correlation ERA5 0.968
 
@@ -394,7 +409,7 @@ Station & Data & RMSE & RMSE ERA5 & Correlation & Correlation ERA5 \\
 & Monthly & 0.12 & 1.44 & 0.985 & 0.968 \\
 \hline
 \end{tabular}
-\caption{Summary of RMSE and Correlation Coefficient for ERA5 and reconstructed data}
+\caption{Summary of RMSE and Correlation Coefficient for ERA5 and reconstructed data.}
 \label{tab:results_summary}
 \end{table}
 

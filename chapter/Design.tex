@@ -5,22 +5,23 @@
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.9\textwidth]{resources/images/ERA5_tas_around_barbados.png}
-    \caption{8x8 grid-points of ERA5 with the 2-meter temperature 
-    for 2020-06-23 19:00 UTC  in the area of a weather station on Barbados}    
-    \label{fig: barbados}
-\end{figure}
-
-\begin{figure}
-    \centering
     \includegraphics[width=\textwidth]{resources/images/supervised_learning.png}
     \caption{Conceptual framework using supervised learning.}
     \label{fig: supervised_learning}
 \end{figure}
 
+\begin{figure}
+    \centering
+    \includegraphics[width=0.9\textwidth]{resources/images/ERA5_tas_around_barbados.png}
+    \caption{8x8 grid-points of ERA5 with the 2-meter temperature 
+    for 2020-06-23 19:00 UTC  in the area of a weather station on Barbados.}    
+    \label{fig: barbados}
+\end{figure}
+
 The conceptual framework of the proposed method is illustrated in \autoref{fig: supervised_learning}.
 Applying the local patterns at the weather station location on top of ERA5 would reconstruct the temperature data at the station.
 The idea is that a Convolutional Neural Network would learn to recognize the relevant patterns in a regional cutout of ERA5 data in the station area.
+An example of such a cutout is shown in \autoref{fig: barbados}.
 Based on the regional ERA5 data, the network would then predict the temperature at the weather station.
 To illustrate with an example in what form these discrepancies can emerge:
 In the case of Barbados, the grid cells of the ERA5 data all lay primarily in the ocean, meaning the diurnal cycle has a much lower amplitude than at the weather station that is located on land.
@@ -33,8 +34,8 @@ Therefore, the model's weight will be adjusted during training so that the diffe
 The design decision to make the model based on one timestep of input for one timestep of output and not on a sequence of timesteps has the following advantages: It allows for simplicity in training, as no sequence handling is needed but simply any single timestep can be used for training.
 It also allows for flexibility in application, as the model can be applied to any single timestep of ERA5 data to reconstruct the temperature at the weather station at that time.
 The disadvantage is that the model can not learn from the sequence of timesteps, meaning it can not learn from the temporal evolution of the weather patterns.
-However, that is not anticipated to be a problem since all that information is already included in the ERA5 data.
-Therefore, when reconstructing missing data, the model is applied to the ERA5 data hour by hour, and the result is a series of hourly predictions that are not connected in time.
+However, that is not anticipated to be a problem because the time evolution is part of the spatial distribution of temperature in the ERA5 grid, as weather systems and the daily cycle have this implicit.
+Therefore, when reconstructing missing data, the model is applied to the ERA5 data hour by hour, and the result is a series of hourly predictions that are not explained and only implicitly connected in time.
 
 \subsection{Data Acquisition and Preprocessing}
 \label{subsec: data_preprocessing}
@@ -50,9 +51,10 @@ Until the model is trained, only the dataset with all the hours marked as presen
 As a result, we have a dataset pair of weather station measurements and ERA5 data, that are coherent in time and space.
 
 \subsection{Training of the Convolutional Neural Network}
+The next step is to train a Convolutional Neural Network (CNN); for further theoretical background on CNNs see \autoref{subsec: cnn}.
 To determine after the training if and to which extent the model learned to reconstruct the missing data, the dataset pair is split again along the time axis into a pair of station with ERA5 data for training and a pair of station with ERA5 data for validation.
 Thus we can later let the model reconstruct values that have actually been measured but haven't been included in the training so we then can validate how successful the reconstruction is.
-With the datasets prepared, the next phase involves configuring and training the Convolutional Neural Network (CNN) for the temperature reconstruction task.
+With the datasets prepared, the next phase involves configuring and training the CNN for the temperature reconstruction task.
 The CNN architecture is tailored to accept input in the form of 8x8 grid cells centered around the weather station's location.
 Employing a supervised learning approach, the CNN is trained using pairs of hourly temperature data from the weather station and corresponding grid cell data from ERA5.
 The training process iteratively feeds batches of data into the CNN, fine-tuning its parameters to minimize prediction errors and optimize accuracy in reconstructing missing temperature values.
@@ -73,3 +75,4 @@ The result is a list of temperature values that are not connected in time but ar
 To predict the temperature at all those times where measurements are missing, preprocessing work can be shortened, with the available datasets already prepared in \ref{subsec: data_preprocessing}.
 For the training the ERA5 dataset was already split into one with all hours marked as missing and one with all hours marked as present.
 Thus, the model can directly be applied to the dataset with all hours marked as missing and then directly filled into the original measurements dataset.
+Insights about the respective software implementation are given in \autoref{sec: implementation} and \autoref{sec: process_orchestration}.

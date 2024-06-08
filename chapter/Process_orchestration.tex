@@ -1,7 +1,7 @@
 \section{Process Orchestration with API and Web interface}
 \label{sec: process_orchestration}
 
-As foretold in \autoref{sec: implementation_introduction}, the idea is to create a system that allows for efficient execution of the three different pipelines: Training, Infilling, and Validation.
+As foretold in \autoref{sec: implementation}'s introduction, the idea is to create a system that allows for efficient execution of the three different pipelines: Training, Infilling, and Validation.
 With the foundation of the previous chapter we have all the necessary preprocessing and postprocessing routines in place.
 When we succeed in creating the next abstraction layer, allowing for easy execution of the different pipelines, such that they handle their process autonomously, we can present an end-to-end solution.
 
@@ -19,7 +19,7 @@ The executors are designed as classes to allow for easy access to the different 
 
 The \code{TrainingExecutor} class is structured such that all requisite inputs are directly passed during object creation. This is mainly the station object (see \autoref{sec: implementation}) which takes care of the data extraction. 
 However, the following pipeline steps are not triggered from the class constructor automatically but from an additional method named \code{execute()}.
-This design choice enables the execution of a similar \code{execute\_with\_sbatch()} version, particularly useful when utilizing the code stack on a supercomputer like Levante at the German Climate Computing Center.
+This design choice enables the execution of a similar \code{execute\_with\_sbatch()} version, particularly useful when utilizing the code stack on a supercomputer like Levante at the German Climate Computing Center (DKRZ).
 The execution initially handles ERA5 data download, a process encompassing several routines detailed in \autoref{sec: implementation}, such as identifying available timesteps, downloading data, merging \code{.grib} files, converting to \code{NetCDF} files, and cropping dimensions as described earlier.
 The robustness of the work in the previous chapter becomes evident here, with all processes controlled effortlessly and unaffected by temporary folder management intricacies.
 Following the completion of the preprocessing steps, when coherent training files are stored in the executor object's temporary folders, it generates the \code{training-args.txt}.
@@ -43,7 +43,7 @@ It's various features are described in the following. The capabilities of the we
 \begin{wrapfigure}[11]{r}{0.5\textwidth}
     \centering
     \includegraphics[width=0.5\textwidth]{resources/images/webinterface_screenshot.png}
-    \caption{Screenshot of the webinterface}
+    \caption{Screenshot of the web interface.}
     \label{fig: webinterface_screenshot}
     \end{wrapfigure}
 Additionally, it is possible to monitor the progress of the process through the API.

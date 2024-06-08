@@ -14,7 +14,7 @@ In the context of this work, an architecture introduced by (\cite{ronneberger201
 \begin{figure}[H]
     \centering
     \animategraphics[loop,autoplay,width=400pt]{1}{resources/images/convolution_gif/convolution_kernel-}{0}{15}
-    \caption{How a convolution operation works}
+    \caption{How a convolution operation works.}
     \source{https://datahacker.rs/edge-detection/ \cite{datahacker}}
     \label{fig: convolution_operation}
 \end{figure}
@@ -46,7 +46,7 @@ To map the output of the convolutional layer to a meaningful space, and to avoid
         \centering
         \vspace{0.5cm}
         \includegraphics[width=0.7\textwidth]{resources/images/max_pooling.png}
-        \caption{Illustration of 3 max pooling operations}
+        \caption{Illustration of 3 max pooling operations.}
         \label{fig: max_pooling}
     \end{subfigure}
     \begin{subfigure}{\textwidth}
@@ -79,7 +79,7 @@ The specific values are determined by the parameters employed in the convolution
 
 With the correct convolution kernels found, the prediction should ideally be the same as the target data.
 The training process is devised to find the best kernel parameters, which are called weights in this context.
-To minimize any differences between ground through and prediction, the differences first need to be quantified in a loss function.
+To minimize any differences between the ground thruth and the prediction, the differences first need to be quantified in a loss function.
 As the model calculates the prediction hour by hour, we only need to compare the prediction to the measured temperature at the weather station at the same hour.
 However, as the prediction is a matrix and the target is a scalar, the absolute differences between the measured temperature and the prediction at each of the 64 data points in the output are added up. 
 

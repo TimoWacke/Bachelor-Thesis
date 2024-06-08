@@ -5,9 +5,6 @@
 % Custom command for inline code
 \newcommand{\code}[1]{\texttt{#1}}
 
-\subsection{Introduction}
-\label{sec: implementation_introduction}
-
 Given that the machine learning part of the software is modulized as "Climate Reconstruction AI" (CRAI), the neural net's setup, training and evaluation are outsourced.
 Thus, the process for a single specific dataset of one station could be written pretty straightforwardly with a \code{NetCDF} file of the station data at hand if there is sufficient access to ERA5 data.
 A Jupyter notebook would be sufficient as a way to start.
@@ -28,14 +25,14 @@ However, the modularity allows for a better understanding and cleaner code, whic
 \begin{figure}
     \centering
     \includegraphics[width=450pt]{resources/images/training_pipeline.png}
-    \caption{Pipeline to train a model}
+    \caption{Pipeline to train a model.}
     \label{fig: training_pipeline}
 \end{figure}
 
 \begin{figure}
     \centering
     \includegraphics[width=450pt]{resources/images/infilling_pipeline.png}
-    \caption{Pipeline to reconstruct weather data using a model}
+    \caption{Pipeline to reconstruct weather data using a model.}
     \label{fig: infilling_pipeline}
 \end{figure}
 

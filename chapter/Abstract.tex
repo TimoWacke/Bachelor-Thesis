@@ -1,18 +1,28 @@
 \section*{Abstract}
 \label{sec: abstract}
 
-This bachelor thesis presents a method to reconstruct missing 2-meter temperature measurements of weather stations using ERA5 Reanalysis data and a Convolutional Neural Network (CNN).
-By supporting low-cost stations with gap-filling, this thesis aims to address challenges posed by sparse weather station coverage.
-The proposed method involves a supervised training of a CNN model to estimate a weather station's hourly measurements solely based on the surrounding 8x8 grid temperature data from the ECMWF ERA5 Reanalysis.
-The trained model can then reconstruct missing station data, outperforming traditional numerical methods in computational efficiency.
-The thesis describes the conceptual framework, including data acquisition, preprocessing, CNN training, and model validation.
-For three weather stations in diverse environments, a model is trained and validated using a root mean square error and correlation coefficient over various time dimensions, showing a reduction in errors and an increase in correlation upon the input data, ERA5, throughout, despite limited training data availability in some cases.
-In order to facilitate the application of the method, an end-to-end software solution is developed, including a user-friendly web interface, allowing users to train, validate and apply models on their own data.
+This bachelor thesis develops and presents a deep learning technique to reconstruct missing 2-meter temperature measurements of weather stations.
+By supporting low-cost 3D printed stations with gap-filling, this thesis addresses challenges posed by sparse weather station coverage.
+The proposed method involves a supervised training of a convolutional neural network to estimate weather station's hourly measurements solely based on the surrounding 8x8 grid or ~250x250km temperature data from the ERA5 Reanalysis by the European Centre of Medium-Range Weather Forecast.
+The trained model demonstrates the capacity to reconstruct missing station data with a computational efficiency that surpasses that of traditional numerical models.
+The thesis describes the conceptual framework and its transition to an applied framework, including data acquisition, preprocessing, neural network training, and model validation for infilling.
+A model was trained and validated for three weather stations in mountain, ocean, and city terrain. The model was tested using a root mean square error and Pearson correlation coefficient over various time dimensions.
+The results demonstrated a reduction in errors and an increase in correlation upon the input data ERA5, despite limited training data availability in some cases. To facilitate the application of the method, an end-to-end software solution was developed, including a user-friendly web interface.
+This flexible approach enables users to train, validate, and apply models to any other station beyond the scope of this thesis.
+In conclusion, this thesis not only presents a novel deep learning approach for reconstructing missing temperature measurements, but also provides a practical, scalable solution for enhancing the reliability of low-cost weather stations worldwide.
 
-\section*{Abstrakt}
+\newpage
 
-Diese Bachelorarbeit stellt eine Methode vor, um fehlende 2-Meter-Temperaturmessungen von Wetterstationen mithilfe von ERA5-Reanalysedaten und eines Convolutional Neural Networks (CNN) zu rekonstruieren.
-Somit sollen Bemühungen für eine besseren Stations-Abdeckung mittels kostengünstigeren aber damit auch unverlässlicheren Wetterstationen, durch diese Arbeit unterstützt werden.
-Ein mittels der vorgeschlagenen methode trainiertes Modell kann dann fehlende Stationsdaten rekonstruieren und zeigt dabei eine verbesserte Effizienz im Vergleich zu traditionellen numerischen Methoden.
-Die Arbeit beschreibt den konzeptionellen Rahmen, einschließlich Datenerfassung, Datenaufbereitung, CNN-Training und Modellvalidierung.
-Die Ergebnisse zeigen, über die Stationen hinweg, eine Reduzierung der Fehler und eine erhöhte Korrelation zu den Messdaten gegenüber den Eingangsdaten aus ERA5. Im Sinne der Zugänglichkeit der Methode, wird eine End-to-End-Softwarelösung entwickelt, die es Benutzern ermöglicht, Modelle mit eigenen Daten zu trainieren, zu validieren und anzuwenden.
+\section*{Zusammenfassung}
+
+Diese Bachelorarbeit entwickelt und präsentiert eine Deep-Learning-Technik zur Rekonstruktion fehlender 2-Meter-Temperaturmessungen von Wetterstationen.
+Und unterstützt damit Bemühungen für eine besseren Stations-Abdeckung mittels kostengünstigeren aber damit auch unverlässlicheren Wetterstationen, durch diese Arbeit unterstützt werden.
+Die vorgeschlagene Methode umfasst ein überwachtes Training eines Convolutional Neural Networks, um stündliche Messungen der Wetterstationen ausschließlich auf Basis der umliegenden 8x8 Raster oder ~250x250 km Temperatursdaten aus der ERA5-Reanalyse des Europäischen Zentrums für mittelfristige Wettervorhersagen zu schätzen.
+Das trainierte Modell kann, fehlende Stationsdaten mit einer Effizienz zu rekonstruieren, die traditionelle numerische Modelle übertrifft.
+Die Arbeit beschreibt den konzeptionellen Rahmen und dessen Umsetzung in einen anwendungsorientierten Rahmen, einschließlich Datenerfassung, Datenvorverarbeitung, Training des neuronalen Netzwerks und Modellvalidierung zur Rekonstruktion.
+Je ein Modell wurde für drei Wetterstationen in Berg-, Ozean- und Stadtgebieten trainiert und validiert.
+Das Modell wurde mit dem Root Mean Square Error und dem Korrelationskoeffizienten über verschiedene Zeitdimensionen getestet.
+Die Ergebnisse zeigten eine Reduzierung der Fehler und eine erhöhte Korrelation im Vergleich zu den Eingangsdaten aus ERA5, trotz begrenzter Verfügbarkeit von Trainingsdaten in einigen Fällen.
+Um die Anwendung der Methode zu erleichtern, wurde eine End-to-End-Softwarelösung entwickelt, die eine benutzerfreundliche Weboberfläche umfasst.
+Dieser flexible Ansatz ermöglicht es den Benutzern, Modelle zu trainieren, zu validieren und auf beliebige andere Stationen anzuwenden, die über den Rahmen dieser Arbeit hinausgehen.
+Abschließend präsentiert diese Arbeit nicht nur einen neuartigen Deep-Learning-Ansatz zur Rekonstruktion fehlender Temperaturmessungen, sondern bietet auch eine praktische, skalierbare Lösung zur Verbesserung der Zuverlässigkeit kostengünstiger Wetterstationen weltweit.

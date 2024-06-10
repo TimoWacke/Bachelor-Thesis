@@ -2,7 +2,7 @@
 \label{sec: process_orchestration}
 
 As foretold in \autoref{sec: implementation}'s introduction, the idea is to create a system that allows for efficient execution of the three different pipelines: Training, Infilling, and Validation.
-With the foundation of the previous chapter we have all the necessary preprocessing and postprocessing routines in place.
+With the foundation of the previous chapter, we have all the necessary preprocessing and postprocessing routines in place.
 When we succeed in creating the next abstraction layer, allowing for easy execution of the different pipelines, such that they handle their process autonomously, we can present an end-to-end solution.
 
 The achieved end-to-end solution comes with a web interface, allowing for an easy user experience.
@@ -17,7 +17,7 @@ The challenge for the foretold web interface and API solution is to store differ
 This begins with passing the corresponding Station object to the executor class, which needs to initialize the process, including the creation of dedicated temporary folders.
 The executors are designed as classes to allow for easy access to the different data of the process entity itself at all steps, from ERA5 download to plotting. For example, it ensures that when plotting after the CRAI module has finished the evaluation.
 
-The \code{TrainingExecutor} class is structured such that all requisite inputs are directly passed during object creation. This is mainly the station object (see \autoref{sec: implementation}) which takes care of the data extraction. 
+The \code{TrainingExecutor} class is structured such that all requisite inputs are directly passed during object creation. This is mainly the station object (see \autoref{sec: implementation}), which takes care of the data extraction. 
 However, the following pipeline steps are not triggered from the class constructor automatically but from an additional method named \code{execute()}.
 This design choice enables the execution of a similar \code{execute\_with\_sbatch()} version, particularly useful when utilizing the code stack on a supercomputer like Levante at the German Climate Computing Center (DKRZ).
 The execution initially handles ERA5 data download, a process encompassing several routines detailed in \autoref{sec: implementation}, such as identifying available timesteps, downloading data, merging \code{.grib} files, converting to \code{NetCDF} files, and cropping dimensions as described earlier.
@@ -26,7 +26,7 @@ Following the completion of the preprocessing steps, when coherent training file
 This file serves as input parameters for the separate machine learning code stack, specifying training execution details and output locations, thereby ensuring hassle-free model saving.
 
 The \code{EvaluationExecutor}, utilized for the infilling routine, mirrors the structure of the \code{TrainingExecutor}, with the distinction that input parameters must include a model path.
-Moreover, the download routines in the \code{EvaluationExecutor} are adjusted to obtain ERA5 data for the hours where measurements are missing, rather than for the hours where measurements are available.
+Moreover, the download routines in the \code{EvaluationExecutor} are adjusted to obtain ERA5 data for the hours where measurements are missing rather than for the hours where measurements are available.
 The class includes an \code{execute()} function as well, sequentially running the steps of the pipeline (see \autoref{fig: infilling_pipeline}).
 The \code{training-args.txt} file for the CRAI module is generated similarly, albeit with parameters pertinent to evaluation.
 The output of the CRAI evaluation is then returned, such that where ever the executor is called from, the results can be processed further.
@@ -37,33 +37,33 @@ The \code{ValidationExecutor} is mainly a wrapper for the \code{EvaluationExecut
 
 \subsection{Web interface}
 
-The web interface is the peak of the system, as it allows for easy interaction through out the full training, validation and infilling.
+The web interface is the peak of the system, as it allows for easy interaction throughout the full training, validation and infilling.
 It's various features are described in the following. The capabilities of the web interface are based on the API endpoints, which are described in \autoref{sec: api}.
 
-\begin{wrapfigure}[11]{r}{0.5\textwidth}
+\begin{figure}
     \centering
-    \includegraphics[width=0.5\textwidth]{resources/images/webinterface_screenshot.png}
+    \includegraphics[width=0.7\textwidth]{resources/images/webinterface_screenshot.png}
     \caption{Screenshot of the web interface.}
     \label{fig: webinterface_screenshot}
-    \end{wrapfigure}
+    \end{figure}
 Additionally, it is possible to monitor the progress of the process through the API.
 The details on the API are described in \autoref{sec: api}.
 This lays out a sufficient foundation for the implementation of a web interface, which is the main focus of this section.
 
 The interface consists of two areas, one where the user is supposed to submit a "dataset", which in this context is meant as a collection of measurements from a weather station and the station's information such as location, and optionally a custom name and third a trained model for the station that can be provided optionally as well.
-If no model is provided the system can train a model and will attach it.
+If no model is provided, the system can train a model and will attach it.
 
 The second area is a list of all datasets that the user has submitted.
 The API implementation allows for user identification through a unique token that is passed on to the server when the user submits a dataset, such that the user can then ask to see all datasets owned by them using that same token.
 The web interface automatically generates a token for the user and stores it then in the local storage of the browser, such that the user does not have to remember it.
 
-As examples in \autoref{fig: webinterface_screenshot} show each dataset depending on its state has different options available.
+As examples in \autoref{fig: webinterface_screenshot} show each dataset depending on its state, has different options available.
 The deletion and train buttons all have in common, as no model is necessary to train a model.
-Datasets where a model has been provided still could be used to train a new model overwriting the old one.
+Datasets where a model has been provided could still be used to train a new model, overwriting the old one.
 The \code{Evaluate} and \code{Fill in} buttons to evaluate the model over the timesteps where measurements are available, respectively to evaluate the model over the timesteps where measurements are missing.
 
 Once a process such as training, evaluation, or infilling has been completed for a dataset the user can download the results anytime through the new buttons that appear in the dataset list.
-For example, it can be seen in \autoref{fig: webinterface_screenshot} that for the Vienna example, validation has been completed, and the user can now download a PDF with all the plots that compare the predictions with the actual measurements, or a \code{CSV} file with the same data, or a zip file that contains both and the images used in the PDF.
+For example, it can be seen in \autoref{fig: webinterface_screenshot} that for the Vienna example, validation has been completed, and the user can now download a PDF with all the plots that compare the predictions with the actual measurements or a \code{CSV} file with the same data, or a zip file that contains both and the images used in the PDF.
 The first Barbados example has a model attached that can be downloaded, meaning either it was provided or generated through training on the server itself.
 The second Barbados example has no model attached yet, meaning only the buttons "Train" and "Delete" are available because no model was provided and no training has been done yet.
 

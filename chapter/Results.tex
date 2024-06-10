@@ -28,7 +28,7 @@ From the 3D-Paws project (see \autoref{sec: 3d_printed_stations}), measurements 
 \label{fig: weather_stations}
 \end{figure}
 
-\begin{wrapfigure}[15]{r}{0.40\textwidth}
+\begin{wrapfigure}[13]{r}{0.40\textwidth}
 \centering
 \includegraphics[width=0.38\textwidth]{resources/images/Marshall_era5.png}
 \caption{ERA5 Area of the station in Marshall, Colorado.}
@@ -232,7 +232,7 @@ The calculated correlation coefficient over the validation year 2021 on an hourl
 Even better is the performance of the model when the hourly values are combined again with daily means, as in \autoref{fig: marshall_daily}.
 The chart shows the daily mean temperature of the three different series, known from the previous chart over 2021.
 In this case, the reduced number of time steps allows for an absolute temperature scale on the y-axis, which makes the performance of the model visually appealing.
-The RMSE on a daily basis for the prediction is almost halved the original one at 1.05°C, while the correlation coefficient is even higher as well at 0.995, the ERA5 correlation coefficient improved significantly as well; however, the RMSE did not as the ERA5 data was impacted drastically by the low-bias.
+The RMSE on a daily basis for the prediction is almost halved the original one at 1.05°C, while the correlation coefficient is even higher as well at 0.995, the ERA5 correlation coefficient improved significantly as well; however, the RMSE did not as the ERA5 data was impacted drastically by the low bias.
 
 \begin{figure}
     \centering
@@ -249,7 +249,7 @@ As all measurements have been recorded in universal time code (UTC), which is al
 It can be observed that ERA5 has a higher amplitude in the diurnal cycle than the weather station and that the model is capable of correcting that.
 
 It is not surprising, that the RMSE and correlation coefficient improve the more the data is aggregated, so it is also essential to look at the hourly values again and go into detail. To allow the details to appear on a plot, the x-axis can be cropped to a shorter period, as in \autoref{fig: marshall_7day}, where the x-axis includes 168 hours, equivalent to 7 days.
-The chart is chosen to be representative, while some weeks have a better fitting than others. In this case, it can be seen that even in the measurements of 2021, minor gaps happened. For example  
+The chart is chosen to be representative, while some weeks have a better fitting than others. In this case, it can be seen that even in the measurements of 2021, minor gaps occured.
 
 
 \begin{figure}

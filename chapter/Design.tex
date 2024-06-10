@@ -63,7 +63,7 @@ The training process iteratively feeds batches of data into the CNN, fine-tuning
 Following the training phase, the CNN's performance is evaluated using the validation set.
 The model's capacity to accurately reconstruct missing temperature data at the weather station is scrutinized against ground truth values.
 This evaluation step serves to gauge the CNN's proficiency in capturing intricate weather patterns and producing precise temperature estimations.
-For that, the root mean squared error (RMSE) and the correlation coefficient are calculated.
+For that, the root mean squared error (RMSE) and the Pearson correlation coefficient (correlation coefficient) are calculated.
 The RMSE is a measure of the differences between predicted and observed values, while the correlation coefficient quantifies the strength and direction of the linear relationship between the two datasets.
 An obvious choice as a time range for the evaluation would be to cut out one complete year so that the model can be evaluated over the full range of seasons and weather conditions.
 

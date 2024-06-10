@@ -30,10 +30,10 @@ Besides this obvious difference between ERA5 and the measurements at Barbados, t
 
 Since the ERA5 data is available globally and hourly, any weather station's missing hour could be reconstructed simply with a model that has been trained for the respective station.
 A supervised learning approach will be used to train the model (see \autoref{fig: supervised_learning}).
-Therefore, the model's weight will be adjusted during training so that the difference between the prediction based on an ERA5 input and the actual measurement is minimized.
+Therefore, the model's weights will be adjusted during training so that the difference between the prediction based on an ERA5 input and the actual measurement is minimized.
 The design decision to make the model based on one timestep of input for one timestep of output and not on a sequence of timesteps has the following advantages: It allows for simplicity in training, as no sequence handling is needed but simply any single timestep can be used for training.
 It also allows for flexibility in application, as the model can be applied to any single timestep of ERA5 data to reconstruct the temperature at the weather station at that time.
-The disadvantage is that the model can not learn from the sequence of timesteps, meaning it can not learn from the temporal evolution of the weather patterns.
+The disadvantage is that the model cannot learn from the sequence of timesteps, meaning it cannot learn from the temporal evolution of the weather patterns.
 However, that is not anticipated to be a problem because the time evolution is part of the spatial distribution of temperature in the ERA5 grid, as weather systems and the daily cycle have this implicit.
 Therefore, when reconstructing missing data, the model is applied to the ERA5 data hour by hour, and the result is a series of hourly predictions that are not explained and only implicitly connected in time.
 
